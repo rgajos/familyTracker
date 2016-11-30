@@ -14,12 +14,13 @@
  * This is needed for cookie based authentication to encrypt password in
  * cookie. Needs to be 32 chars long.
  */
+  define('DB_HOST',getenv('OPENSHIFT_MYSQL_DB_HOST')); define('DB_PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));  define('DB_NAME',getenv('OPENSHIFT_GEAR_NAME'));
 $cfg['blowfish_secret'] = 'qwertyuiop'; /* YOU MUST FILL IN THIS FOR COOKIE AUTH! */
 
 /**
  * Servers configuration
  */
- define('DB_HOST',getenv('OPENSHIFT_MYSQL_DB_HOST')); define('DB_PORT',getenv('OPENSHIFT_MYSQL_DB_PORT'));  define('DB_NAME',getenv('OPENSHIFT_GEAR_NAME'));
+
 $i = 0;
 
 /**
@@ -38,8 +39,6 @@ $cfg['ForceSSL'] = true;
 /**
  * phpMyAdmin configuration storage settings.
  */
-$cfg['Servers'][$i]['user']
-$cfg['Servers'][$i]['password']
 /* User used to manipulate with storage */
 // $cfg['Servers'][$i]['controlhost'] = '';
 // $cfg['Servers'][$i]['controlport'] = '';
