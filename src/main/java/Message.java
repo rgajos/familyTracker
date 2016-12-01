@@ -9,7 +9,6 @@
  * @author Przemek
  */
 public class Message {
-    private long id;
     private long peopleId;
     private String msg;
     private String time;
@@ -17,19 +16,10 @@ public class Message {
     public Message() {
     }
 
-    public Message(long id, String msg, long peopleId, String time) {
-        this.id = id;
+    public Message(String msg, long peopleId, String time) {
         this.msg = msg;
         this.peopleId = peopleId;
         this.time = time;
-    }
-
-    public long getId() {
-        return id;
-    }
-
-    public void setId(long id) {
-        this.id = id;
     }
 
     public String getMsg() {
@@ -59,7 +49,6 @@ public class Message {
     @Override
     public String toString() {
         return "Message{"
-                + "id=" + id
                 + ", peopleId='" + peopleId + '\''
                 + ", msg='" + msg + '\''
                 + ", time='" + time + '\''
