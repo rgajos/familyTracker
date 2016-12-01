@@ -72,6 +72,7 @@ public class RegisterFamilyMember extends HttpServlet {
                         
                 JSONObject json = new JSONObject();
                 JSONObject jsonSettings = new JSONObject();
+                JSONObject jsonMessages = new JSONObject();
                 JSONArray jSONArrayPeoples = new JSONArray();
                 JSONArray jSONArrayPlaces = new JSONArray();
                 JSONArray jSONArrayPlace2People = new JSONArray();
@@ -98,6 +99,15 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
 
+                String getMessagesQuery = "select * from messages where ID='" + rs.getInt(5) + "'";
+                ps = connection.prepareStatement(getMessagesQuery);
+                rs = ps.executeQuery();
+
+                if (rs.next()) {
+                    jsonMessages.put("id", rs.getLong(1));
+                    jsonMessages.put("msg", rs.getString(2));
+                }
+                
                 String getPlacesQuery = "select * from places where USER_ID='" + userId + "'";
                 ps = connection.prepareStatement(getPlacesQuery);
                 rs = ps.executeQuery();
@@ -178,8 +188,9 @@ public class RegisterFamilyMember extends HttpServlet {
                 String deleteAddPeopleQuery = "delete from add_people where code=" + jsonObject.get("code").toString();
                 ps = connection.prepareStatement(deleteAddPeopleQuery);
                 ps.executeUpdate();
-
+                
                 json.put("settings", jsonSettings);
+                json.put("messages", jsonMessages);
                 json.put("places", jSONArrayPlaces);
                 json.put("memberContext", context);
                 json.put("place2Peoples", jSONArrayPlace2People);

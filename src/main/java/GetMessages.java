@@ -30,8 +30,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "SignIn", urlPatterns = {"/SignIn5220"})
-public class SignIn extends HttpServlet {
+@WebServlet(name = "GetMessages", urlPatterns = {"/GetMessages5220"})
+public class GetMessages extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -60,102 +60,11 @@ public class SignIn extends HttpServlet {
             String checkEmailQuery = "select * from user where EMAIL='" + jsonObject.get("email").toString() + "'";
             ps = connection.prepareStatement(checkEmailQuery);
             ResultSet rs = ps.executeQuery();
-            
+
             Long userId = 0L;
-            
+
             if (rs.next()) {
-                if (rs.getString(4).equals(jsonObject.get("password").toString())){
-                    
-                    userId = rs.getLong(1);
-                   
-                    
-                    JSONObject json = new JSONObject();
-                    JSONObject jsonSettings = new JSONObject();
-                    JSONObject jsonMessages = new JSONObject();
-                    JSONArray jSONArrayPeoples = new JSONArray();
-                    JSONArray jSONArrayPlaces = new JSONArray();
-                    JSONArray jSONArrayPlace2People = new JSONArray();
-                    
-                    String getSettingsQuery = "select * from settings where USER_ID='" + userId + "'";
-                    ps = connection.prepareStatement(getSettingsQuery);
-                    rs = ps.executeQuery();
-                    
-                    if (rs.next()) {
-                        jsonSettings.put("id", rs.getLong(1));
-                        jsonSettings.put("familyChange", rs.getInt(2));
-                        jsonSettings.put("placesChange", rs.getInt(3));
-                        jsonSettings.put("gpsRefresh", rs.getInt(4));
-                        jsonSettings.put("notifications", rs.getString(5));
-                        jsonSettings.put("userId", rs.getLong(6));
-                    }
-                    
-                    String getMessagesQuery = "select * from messages where USER_ID='" + userId + "'";
-                    ps = connection.prepareStatement(getMessagesQuery);
-                    rs = ps.executeQuery();
 
-                    if (rs.next()) {
-                        jsonMessages.put("id", rs.getLong(1));
-                        jsonMessages.put("msg", rs.getString(2));
-                    }
-                   
-                    String getPeopleQuery = "select * from people where USER_ID='" + userId + "'";
-                    ps = connection.prepareStatement(getPeopleQuery);
-                    rs = ps.executeQuery();
-                    
-                    
-                    while (rs.next()) {
-                        JSONObject people = new JSONObject();
-                        people.put("id", rs.getLong(1));
-                        people.put("name", rs.getString(2));
-                        people.put("localizationId", rs.getLong(4));
-                        people.put("active", rs.getInt(5));
-                        people.put("image", rs.getBlob(6));
-                        people.put("context", rs.getInt(8));
-                        people.put("authorizedSpeed", rs.getInt(9));
-                        
-                        jSONArrayPeoples.add(people);
-                    }
-
-                    String getPlacesQuery = "select * from places where USER_ID='" + userId + "'";
-                    ps = connection.prepareStatement(getPlacesQuery);
-                    rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        JSONObject places = new JSONObject();
-                        places.put("id", rs.getLong(1));
-                        places.put("name", rs.getString(2));
-                        places.put("radius", rs.getInt(3));
-                        places.put("longitude", rs.getDouble(4));
-                        places.put("latitude", rs.getDouble(5));
-
-                        jSONArrayPlaces.add(places);
-                    }
-                    
-                    String getPlaces2PeopleQuery = "select * from place2people where USER_ID='" + userId + "'";
-                    ps = connection.prepareStatement(getPlaces2PeopleQuery);
-                    rs = ps.executeQuery();
-
-                    while (rs.next()) {
-                        JSONObject place2People = new JSONObject();
-                        place2People.put("id", rs.getLong(1));
-                        place2People.put("placeId", rs.getLong(2));
-                        place2People.put("peopleId", rs.getLong(3));
-
-                        jSONArrayPlace2People.add(place2People);
-                    }
-                    json.put("settings", jsonSettings);
-                    json.put("peoples", jSONArrayPeoples);
-                    json.put("places", jSONArrayPlaces);
-                    json.put("messages", jsonMessages);
-                    json.put("place2Peoples", jSONArrayPlace2People);
-                    json.put("error", 0);
-                    response.getWriter().write(json.toString());
-                }else{
-                    JSONObject json = new JSONObject();
-                    json.put("error", 1);
-                    json.put("desc", "");
-                    response.getWriter().write(json.toString());
-                }
             } else {
                 JSONObject json = new JSONObject();
                 json.put("error", 1);
