@@ -75,7 +75,7 @@ public class SendMessage extends HttpServlet {
                     serverMessages.remove(20);
                 }
                 
-                Message message = new Message(jsonObject.get("messages").toString(), (Long)jsonObject.get("peopleId"), jsonObject.get("time").toString());
+                Message message = new Message(jsonObject.get("message").toString(), (Long)jsonObject.get("peopleId"), jsonObject.get("time").toString());
                 serverMessages.add(message);
                 
                 String actualMessages = gson.toJson(serverMessages);
