@@ -64,7 +64,7 @@ public class GetMessages extends HttpServlet {
             String msg = "";
 
             if (rs.next()) {
-                  msg = rs.getString(2);
+                  msg = rs.getString(1);
             } else {
                 JSONObject json = new JSONObject();
                 json.put("error", 1);
