@@ -69,7 +69,7 @@ public class SendMessage extends HttpServlet {
             
             if(rs.next()){
                 Gson gson = new Gson();
-                ArrayList serverMessages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(2), Message[].class)));
+                ArrayList serverMessages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(1), Message[].class)));
                 
                 if(serverMessages.size() > 19){
                     serverMessages.remove(20);
