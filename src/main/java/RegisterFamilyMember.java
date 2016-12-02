@@ -186,6 +186,7 @@ public class RegisterFamilyMember extends HttpServlet {
                         people.put("image", rs.getBlob(6));
                         people.put("context", rs.getInt(8));
                         people.put("authorizedSpeed", rs.getInt(9));
+                        people.put("messagesId", rs.getLong(10));
                         jSONArrayPeoples.add(people);
                     }
                     cnt++;
