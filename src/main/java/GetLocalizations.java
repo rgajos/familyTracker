@@ -35,8 +35,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "SyncLocalizations", urlPatterns = {"/SyncLocalizations5220"})
-public class SyncLocalizations extends HttpServlet {
+@WebServlet(name = "GetLocalizations", urlPatterns = {"/GetLocalizations5220"})
+public class GetLocalizations extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -65,29 +65,19 @@ public class SyncLocalizations extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             ResultSet rs;
-            
+
             JSONObject json = new JSONObject();
             cnt++;
-            cnt++;
-            String updateLocalizationQuery = "update localizations set "
-                    + "LONGITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("longitude"))+ "',"
-                    + "LATITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("latitude")) + "',"
-                    + "TIME='" + jsonObject.get("time").toString() + "',"
-                    + "BATTERY='" + (Long)jsonObject.get("battery") + "',"
-                    + "ACCURACY='" + BigDecimal.valueOf((Double)jsonObject.get("accuracy")) + "'"
-                    + " where ID='" + (Long)jsonObject.get("localizationId") + "'";
-            ps = connection.prepareStatement(updateLocalizationQuery);
-            ps.executeUpdate();
-            cnt++;
+
             cnt++;
                 cnt++;
-            if(jsonObject.get("peoplesLocalizationId").toString().length() > 0){
+            if (jsonObject.get("peoplesLocalizationId").toString().length() > 0) {
                 JSONArray localizationJSONArray = new JSONArray();
 
                 String getLocalizationsQuery = "select * from localizations where ID in (" + jsonObject.get("peoplesLocalizationId").toString() + ")";
                 ps = connection.prepareStatement(getLocalizationsQuery);
                 rs = ps.executeQuery();
-                while(rs.next()){
+                while (rs.next()) {
                     JSONObject localization = new JSONObject();
                     localization.put("id", rs.getLong(1));
                     localization.put("longitude", rs.getDouble(2));
@@ -102,33 +92,31 @@ public class SyncLocalizations extends HttpServlet {
                 }
                 json.put("localizations", localizationJSONArray);
             }
-            
+
             JSONObject jsonSettings = new JSONObject();
 
             String getSettingsQuery = "select * from settings where ID='" + jsonObject.get("settingId").toString() + "'";
             ps = connection.prepareStatement(getSettingsQuery);
             rs = ps.executeQuery();
-            
+
             cnt++;
             if (rs.next()) {
                 jsonSettings.put("familyChange", rs.getInt(2));
                 jsonSettings.put("placesChange", rs.getInt(3));
                 jsonSettings.put("gpsRefresh", rs.getInt(4));
                 jsonSettings.put("notifications", rs.getString(5));
-              
+
             }
-            boolean deletedNotification = (Boolean) jsonObject.get("deletedNotification");
-            boolean addNotification = (Boolean) jsonObject.get("addNotification");
-            
-            if (deletedNotification && !addNotification) {
-                
+
+            if ((Boolean) jsonObject.get("deletedNotification")) {
+
                 Gson gson = new Gson();
                 ArrayList serverNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(rs.getString(5), Notification[].class)));
-                
+
                 int notificationSize = serverNotifications.size();
-                
-                if(notificationSize > 0){
-                
+
+                if (notificationSize > 0) {
+
                     Notification[] notifications = gson.fromJson(jsonObject.get("notifications").toString(), Notification[].class);
 
                     for (Iterator<Notification> iterator = serverNotifications.iterator(); iterator.hasNext();) {
@@ -139,79 +127,15 @@ public class SyncLocalizations extends HttpServlet {
                             }
                         }
                     }
-                    if(notificationSize > serverNotifications.size()){
+                    if (notificationSize > serverNotifications.size()) {
                         String actualNotifications = gson.toJson(serverNotifications);
                         jsonSettings.put("notifications", actualNotifications);
-                        
+
                         String updateNotificationQuery = "update settings set NOTIFICATIONS='" + actualNotifications + "' where ID='" + jsonObject.get("settingId").toString() + "'";
                         ps = connection.prepareStatement(updateNotificationQuery);
                         ps.executeUpdate();
                     }
                 }
-            }
-            
-            if (!deletedNotification && addNotification) {
-                
-                Gson gson = new Gson();
-                ArrayList serverNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(rs.getString(5), Notification[].class)));
-                Notification notification = new Notification();
-                notification.setTime(jsonObject.get("notificationTime").toString());
-                notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setPeopleId((Long)jsonObject.get("notificationPeopleId"));
-                serverNotifications.add(notification);
-                
-                String actualNotifications = gson.toJson(serverNotifications);
-                jsonSettings.put("notifications", actualNotifications);
-
-                String updateNotificationQuery = "update settings set NOTIFICATIONS='" + actualNotifications + "' where ID='" + jsonObject.get("settingId").toString() + "'";
-                ps = connection.prepareStatement(updateNotificationQuery);
-                ps.executeUpdate();
-            }
-            
-            if (deletedNotification && addNotification) {
-                sb.append("jedno i drguie true ");
-                cnt++;
-                Gson gson = new Gson();
-                ArrayList serverNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(rs.getString(5), Notification[].class)));
-                cnt++;
-                sb.append("server notification: "+serverNotifications.toString());
-                int notificationSize = serverNotifications.size();
-                cnt++;
-                if (notificationSize > 0) {
-                    sb.append("jest wieksze niz 0 ");
-                    cnt++;
-                    Notification[] notifications = gson.fromJson(jsonObject.get("notifications").toString(), Notification[].class);
-                    cnt++;
-                    for (Iterator<Notification> iterator = serverNotifications.iterator(); iterator.hasNext();) {
-                        sb.append("iteruje 1");
-                        Notification serverNotification = iterator.next();
-                        for (Notification notification : notifications) {
-                            sb.append("iteruje 2 ");
-                            if (notification.getTime().equals(serverNotification.getTime())) {
-                                sb.append("remowoje ");
-                                iterator.remove();
-                            }
-                        }
-                    }            cnt++;
-                }
-                sb.append("bedzei robil notification");
-                Notification notification = new Notification();
-                notification.setTime(jsonObject.get("notificationTime").toString());
-                notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setPeopleId((Long) jsonObject.get("notificationPeopleId"));
-                sb.append("zrobil notification");
-                cnt++;
-                serverNotifications.add(notification);
-                cnt++;
-                String actualNotifications = gson.toJson(serverNotifications);
-                cnt++;
-                sb.append("actuialnotifi: "+actualNotifications);
-                jsonSettings.put("notifications", actualNotifications);
-                cnt++;
-                String updateNotificationQuery = "update settings set NOTIFICATIONS='" + actualNotifications + "' where ID='" + jsonObject.get("settingId").toString() + "'";
-                ps = connection.prepareStatement(updateNotificationQuery);
-                ps.executeUpdate();
-                cnt++;
             }
 
             cnt++;
@@ -225,24 +149,24 @@ public class SyncLocalizations extends HttpServlet {
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+ cnt);
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } catch (NamingException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+ cnt);
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } catch (SQLException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+ cnt);
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+cnt+sb);
+            json.put("desc", ex.getMessage() + cnt + sb);
             response.getWriter().write(json.toString());
-        }finally {
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();
