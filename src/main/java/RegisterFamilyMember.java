@@ -152,12 +152,13 @@ public class RegisterFamilyMember extends HttpServlet {
                     localizationId = generatedKeys.getInt(1);
                 }
                 cnt++;
-                String insertPeopleQuery = "insert into people (name, user_id, localization_id, context) values (?,?,?,?)";
+                String insertPeopleQuery = "insert into people (name, user_id, localization_id, context, messages_id) values (?,?,?,?,?)";
                 ps = connection.prepareStatement(insertPeopleQuery, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, jsonObject.get("name").toString());
                 ps.setLong(2, userId);
                 ps.setLong(3, localizationId);
                 ps.setInt(4, context);
+                ps.setLong(5, messagesId);
                 ps.executeUpdate();
                 cnt++;
                 generatedKeys = ps.getGeneratedKeys();

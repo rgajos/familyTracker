@@ -64,17 +64,17 @@ public class GetMessages extends HttpServlet {
             String msg = "";
 
             if (rs.next()) {
-                  msg = rs.getString(2);
+                msg = rs.getString(2);
+                JSONObject json = new JSONObject();
+                json.put("msg", msg);
+                json.put("error", 0);
+                response.getWriter().write(json.toString());
             } else {
                 JSONObject json = new JSONObject();
                 json.put("error", 1);
                 json.put("desc", "");
                 response.getWriter().write(json.toString());
             }
-            JSONObject json = new JSONObject();
-            json.put("msg", msg);
-            json.put("error", 0);
-            response.getWriter().write(json.toString());
 
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
