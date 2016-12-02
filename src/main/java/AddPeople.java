@@ -56,7 +56,7 @@ public class AddPeople extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messagesId) values (?,?,?,?)";
+            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
             ps = connection.prepareStatement(insertAddPeopleQuery);
             
             ps.setLong(1, (Long)jsonObject.get("code"));
