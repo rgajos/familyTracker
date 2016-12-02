@@ -85,6 +85,21 @@ public class SendMessage extends HttpServlet {
                 ps.executeUpdate();
                 
                 json.put("error", 0);
+                
+                String getSettingsQuery = "select * from settings where ID=" + (Long)jsonObject.get("settingsId");
+                ps = connection.prepareStatement(getSettingsQuery);
+                rs = ps.executeQuery();
+
+                int messageCounter = 0;
+                
+                if (rs.next()) {
+                    messageCounter = rs.getInt(7);
+                    messageCounter++;
+                }
+                String updateFamilyChangeQuery = "update settings set MESSAGES_COUNTER='" + messageCounter + "' where ID="+ (Long) jsonObject.get("settingsId");
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
+                ps.executeUpdate();
+                
             }else{
                 json.put("error", 1);
                 json.put("desc", "Try Again");
