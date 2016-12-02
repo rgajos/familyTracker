@@ -4,19 +4,32 @@
  * and open the template in the editor.
  */
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Random;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.sql.DataSource;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 /**
  *
- * @author Przemek
+ * @author Radek
  */
-@WebServlet(urlPatterns = {"/ChangeActivity"})
+@WebServlet(name = "ChangeActivity", urlPatterns = {"/ChangeActivity5220"})
 public class ChangeActivity extends HttpServlet {
 
     /**
@@ -30,21 +43,63 @@ public class ChangeActivity extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
+        Connection connection = null;
+        PreparedStatement ps = null;
         try {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet ChangeActivity</title>");            
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet ChangeActivity at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            BufferedReader bufferedReader = request.getReader();
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
+
+            InitialContext ic = new InitialContext();
+            Context initialContext = (Context) ic.lookup("java:comp/env");
+            DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
+            connection = datasource.getConnection();
+
+            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id) values (?,?,?)";
+            ps = connection.prepareStatement(insertAddPeopleQuery);
+
+            ps.setLong(1, (Long) jsonObject.get("code"));
+            ps.setLong(2, (Long) jsonObject.get("context"));
+            ps.setLong(3, (Long) jsonObject.get("settingsId"));
+            ps.executeUpdate();
+
+            JSONObject json = new JSONObject();
+            json.put("error", 0);
+            response.getWriter().write(json.toString());
+
+        } catch (IOException ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage());
+            response.getWriter().write(json.toString());
+        } catch (NamingException ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage());
+            response.getWriter().write(json.toString());
+        } catch (SQLException ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage());
+            response.getWriter().write(json.toString());
         } finally {
-            out.close();
+            try {
+                if (connection != null) {
+                    connection.close();
+                }
+                if (out != null) {
+                    out.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException ex) {
+                JSONObject json = new JSONObject();
+                json.put("error", 2);
+                json.put("desc", ex.getMessage());
+                response.getWriter().write(json.toString());
+            }
         }
     }
 
