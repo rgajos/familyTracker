@@ -72,17 +72,29 @@ public class ResetPassword extends HttpServlet {
             
             String setPasswordQuery = "update user set PASSWORD = 'np" + randromCode + "',RESET_PASSWORD = '0' where RESET_PASSWORD ='" + code + "'";
             ps = connection.prepareStatement(setPasswordQuery);
-            ps.executeUpdate();
+            int id = ps.executeUpdate();
             
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Title tracker</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Your new password is: np" + randromCode + ".<br><br> You can change the password in the account settings</h1>");
-            out.println("</body>");
-            out.println("</html>");
+            if(id > 0){
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Title tracker</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Your new password is: np" + randromCode + ".<br><br> You can change the password in the account settings</h1>");
+                out.println("</body>");
+                out.println("</html>");
+            }else{
+                out.println("<!DOCTYPE html>");
+                out.println("<html>");
+                out.println("<head>");
+                out.println("<title>Title tracker</title>");
+                out.println("</head>");
+                out.println("<body>");
+                out.println("<h1>Something goes wrong. Try again.</h1>");
+                out.println("</body>");
+                out.println("</html>");  
+            }
         } catch (NamingException ex) {
             out.println("<!DOCTYPE html>");
             out.println("<html>");
