@@ -84,7 +84,7 @@ public class ResetPassword extends HttpServlet {
             out.println("<title>Title tracker</title>");
             out.println("</head>");
             out.println("<body>");
-            out.println("<h1>Your new password is: np" + randromCode + ". You can change the password in the account settings</h1>");
+            out.println("<h1>Your new password is: np" + randromCode + ".<br><br> You can change the password in the account settings.</h1>");
             out.println("</body>");
             out.println("</html>");
         } catch (NamingException ex) {
