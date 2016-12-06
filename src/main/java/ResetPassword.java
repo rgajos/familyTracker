@@ -70,12 +70,8 @@ public class ResetPassword extends HttpServlet {
             Random random = new Random();
             int randromCode = random.nextInt(10000) + 2;
             
-            String setPasswordQuery = "update user set PASSWORD = 'np" + randromCode + "' where RESET_PASSWORD ='" + code + "'";
+            String setPasswordQuery = "update user set PASSWORD = 'np" + randromCode + "',RESET_PASSWORD = '0' where RESET_PASSWORD ='" + code + "'";
             ps = connection.prepareStatement(setPasswordQuery);
-            ps.executeUpdate();
-            
-            String setCodeQuery = "update user set RESET_PASSWORD = '0' where RESET_PASSWORD ='np" + code + "'";
-            ps = connection.prepareStatement(setCodeQuery);
             ps.executeUpdate();
             
             out.println("<!DOCTYPE html>");
