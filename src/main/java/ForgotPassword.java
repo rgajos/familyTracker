@@ -69,10 +69,10 @@ public class ForgotPassword extends HttpServlet {
             if (rs.next()) {
                 
                 SendEmail sendEmail = new SendEmail();
-                String result = sendEmail.sendMessage("trackerrgmobile@yahoo.com",
+                String result = sendEmail.sendMessage("Family Locator & GPS Tracker",
                         jsonObject.get("email").toString(),
-                        "Password recovery",
-                        "Please click the following link to reset your password: \n <a href = \"http://tracker-rgajos.rhcloud.com/ResetPassword?code=" + code +"\"> RESET PASSWORD </a>");
+                        "Password reset request confirmation",
+                        "We've received your request to reset your password, and would be glad to help. \n In order for us to verify you are the account owner, please click the following link to reset your password. \n Please click the following link to reset your password: \n <a href = \"http://familytracker-rgajos.rhcloud.com/ResetPassword?code=" + code +"\"> RESET PASSWORD </a> \n If clicking the link above doesn't work, please copy and paste the URL in a new browser window instead. \n If you did not request your password to be reset (or you remembered your password), just ignore this messsage; no changes have been made to your account. \n Sincerely, \n The RG Mobile Team");
                 if(result.equals("ok")){
                     JSONObject json = new JSONObject();
                     json.put("error", 0);
