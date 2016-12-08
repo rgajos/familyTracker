@@ -96,7 +96,7 @@ public class SendMessage extends HttpServlet {
                     messageCounter = rs.getInt(7);
                     messageCounter++;
                 }
-                String updateFamilyChangeQuery = "update settings set MESSAGES_COUNTER='" + messageCounter + "' where ID="+ (Long) jsonObject.get("settingsId");
+                String updateFamilyChangeQuery = "update settings set MSG_COUNTER='" + messageCounter + "' where ID="+ (Long) jsonObject.get("settingsId");
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
                 
