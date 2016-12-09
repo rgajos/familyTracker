@@ -29,8 +29,9 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "ChangeActivity", urlPatterns = {"/ChangeActivity5220"})
-public class ChangeActivity extends HttpServlet {
+@WebServlet(name = "ChangeAvatar", urlPatterns = {"/ChangeAvatar5220"})
+public class ChangeAvatar extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -59,6 +60,7 @@ public class ChangeActivity extends HttpServlet {
             ps = connection.prepareStatement(getSettingsQuery);
             ResultSet rs = ps.executeQuery();
 
+            
             if (rs.next()) {
                 int familyChange = rs.getInt(2);
                 familyChange++;
@@ -67,7 +69,7 @@ public class ChangeActivity extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            String updatePeopleAvatarQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+            String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
             ps = connection.prepareStatement(updatePeopleAvatarQuery);
             ps.executeUpdate();
 
