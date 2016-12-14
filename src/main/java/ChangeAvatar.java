@@ -69,10 +69,15 @@ public class ChangeAvatar extends HttpServlet {
                 ps.executeUpdate();
             }
 
-            String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
-            ps = connection.prepareStatement(updatePeopleAvatarQuery);
-            ps.executeUpdate();
-
+            if((Long) jsonObject.get("avatar") > 0){
+                String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                ps = connection.prepareStatement(updatePeopleAvatarQuery);
+                ps.executeUpdate();
+            }else{
+                String updatePeopleImageQuery = "update people set IMAGE='" + (byte[]) jsonObject.get("photo") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                ps = connection.prepareStatement(updatePeopleImageQuery);
+                ps.executeUpdate();
+            }
             JSONObject json = new JSONObject();
             json.put("error", 0);
             response.getWriter().write(json.toString());
