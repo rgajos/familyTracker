@@ -47,6 +47,8 @@ public class ChangeAvatar extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
+        
+        int cnt = 0;
         try {
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
@@ -60,7 +62,7 @@ public class ChangeAvatar extends HttpServlet {
             ps = connection.prepareStatement(getSettingsQuery);
             ResultSet rs = ps.executeQuery();
 
-            
+            cnt ++;
             if (rs.next()) {
                 int familyChange = rs.getInt(2);
                 familyChange++;
@@ -68,16 +70,19 @@ public class ChangeAvatar extends HttpServlet {
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
             }
-
+            cnt++;
             if((Long) jsonObject.get("avatar") > 0){
+                cnt++;
                 String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
                 ps = connection.prepareStatement(updatePeopleAvatarQuery);
                 ps.executeUpdate();
             }else{
+                cnt++;
                 String updatePeopleImageQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "', IMAGE='" + (byte[]) jsonObject.get("photo") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
                 ps = connection.prepareStatement(updatePeopleImageQuery);
                 ps.executeUpdate();
             }
+            cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
             response.getWriter().write(json.toString());
@@ -96,6 +101,11 @@ public class ChangeAvatar extends HttpServlet {
             JSONObject json = new JSONObject();
             json.put("error", 2);
             json.put("desc", ex.getMessage());
+            response.getWriter().write(json.toString());
+        } catch (Exception ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage()+cnt);
             response.getWriter().write(json.toString());
         } finally {
             try {
