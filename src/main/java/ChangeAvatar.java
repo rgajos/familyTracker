@@ -24,7 +24,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.postgresql.util.Base64;
 
 /**
  *
@@ -79,8 +78,13 @@ public class ChangeAvatar extends HttpServlet {
                 ps.executeUpdate();
             }else{
                 cnt++;
-                byte[] byteArrayPhoto = Base64.decode((String) jsonObject.get("photo"));
-                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE=" + byteArrayPhoto + " where ID=" + (Long) jsonObject.get("peopleId") ;
+                String stringbyte = (String)jsonObject.get("photo");
+                String[] bytesString = stringbyte.split(" ");
+                    byte[] bytes = new byte[bytesString.length];
+                    for(int i = 0 ; i < bytes.length ; ++i) {
+                        bytes[i] = Byte.parseByte(bytesString[i]);
+}
+                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE='" + bytes + "' where ID=" + (Long) jsonObject.get("peopleId") ;
                 ps = connection.prepareStatement(updatePeopleImageQuery);
                 ps.executeUpdate();
             }
