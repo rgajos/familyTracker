@@ -184,9 +184,9 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
                     
-                    byte[] bdata = rs.getBlob(6).getBytes(1, (int)rs.getBlob(6).length());
-                    String photo = new String(bdata);
-                  
+                    int blobLength = (int) rs.getBlob(6).length();  
+                    byte[] blobAsBytes = rs.getBlob(6).getBytes(1, blobLength);
+                    String photo = Base64.encodeBytes(blobAsBytes, 0);
                     
                     people.put("image", photo);
                     people.put("context", rs.getInt(8));
