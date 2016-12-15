@@ -184,8 +184,14 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("name", rs.getString(2));
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
-
                     
+                    Blob blob =  rs.getBlob(6);
+                     cnt++;
+                    byte[] imageBytes = blob.getBytes(1, (int) blob.length());
+                     cnt++;
+                    String photo = imageBytes.toString();
+                     cnt++;
+                    people.put("image", photo);
                     people.put("context", rs.getInt(8));
                     people.put("authorizedSpeed", rs.getInt(9));
                     people.put("messagesId", rs.getInt(10));
@@ -225,6 +231,11 @@ public class RegisterFamilyMember extends HttpServlet {
             json.put("desc", ex.getMessage()+ cnt);
             response.getWriter().write(json.toString());
         } catch (SQLException ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage()+cnt);
+            response.getWriter().write(json.toString());
+        } catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
             json.put("desc", ex.getMessage()+cnt);
