@@ -156,7 +156,7 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps.executeUpdate();
                 
                 if (context == 1) {
-                    String getPeopleQuery = "select * from people where USER_ID='" + userId + "'";
+                    String getPeopleQuery = "select * from people where USER_ID=" + userId + "";
                     ps = connection.prepareStatement(getPeopleQuery);
                     rs = ps.executeQuery();
 

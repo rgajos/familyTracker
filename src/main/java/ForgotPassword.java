@@ -72,7 +72,7 @@ public class ForgotPassword extends HttpServlet {
                 String result = sendEmail.sendMessage("trackerrgmobile@yahoo.com",
                         jsonObject.get("email").toString(),
                         "Password recovery",
-                        "Please click the following link to reset your password: \n <a href = \"http://tracker-rgajos.rhcloud.com/ResetPassword?code=" + code +"\"> RESET PASSWORD </a>");
+                        "Please click the following link to reset your password: \n <a href = \"http://familytracker-rgajos.rhcloud.com/ResetPassword?code=" + code +"\"> RESET PASSWORD </a>");
                 if(result.equals("ok")){
                     JSONObject json = new JSONObject();
                     json.put("error", 0);
