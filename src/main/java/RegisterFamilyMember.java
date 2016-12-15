@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.postgresql.util.Base64;
 
 /**
  *
@@ -182,7 +183,12 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("name", rs.getString(2));
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
-                    people.put("image", rs.getBlob(6));
+                    
+                    int blobLength = (int) rs.getBlob(6).length();  
+                    byte[] blobAsBytes = rs.getBlob(6).getBytes(1, blobLength);
+                    String photo = Base64.encodeBytes(blobAsBytes, 0);
+                    
+                    people.put("image", photo);
                     people.put("context", rs.getInt(8));
                     people.put("authorizedSpeed", rs.getInt(9));
                     people.put("messagesId", rs.getInt(10));
