@@ -186,12 +186,15 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("active", rs.getInt(5));
                     
                     Blob blob =  rs.getBlob(6);
-                     cnt++;
+                    if(blob != null){
                     byte[] imageBytes = blob.getBytes(1, (int) blob.length());
-                     cnt++;
+
                     String photo = imageBytes.toString();
-                     cnt++;
                     people.put("image", photo);
+                    }
+                     cnt++;
+                     cnt++;
+
                     people.put("context", rs.getInt(8));
                     people.put("authorizedSpeed", rs.getInt(9));
                     people.put("messagesId", rs.getInt(10));
