@@ -172,27 +172,25 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps = connection.prepareStatement(updateLocalizationQuery);
                 ps.executeUpdate();
                 cnt++;
-                if (context == 1) {
-                    String getPeopleQuery = "select * from people where USER_ID=" + userId + "";
-                    ps = connection.prepareStatement(getPeopleQuery);
-                    rs = ps.executeQuery();
-                    cnt++;
-                    while (rs.next()) {
-                        JSONObject people = new JSONObject();
-                        people.put("id", rs.getLong(1));
-                        people.put("name", rs.getString(2));
-                        people.put("localizationId", rs.getInt(4));
-                        people.put("active", rs.getInt(5));
-                        people.put("image", rs.getBlob(6));
-                        people.put("context", rs.getInt(8));
-                        people.put("authorizedSpeed", rs.getInt(9));
-                        people.put("messagesId", rs.getInt(10));
-                        people.put("avatar", rs.getInt(11));
-                        jSONArrayPeoples.add(people);
-                    }
-                    cnt++;
-                    json.put("peoples", jSONArrayPeoples);
+                String getPeopleQuery = "select * from people where USER_ID=" + userId + "";
+                ps = connection.prepareStatement(getPeopleQuery);
+                rs = ps.executeQuery();
+                cnt++;
+                while (rs.next()) {
+                    JSONObject people = new JSONObject();
+                    people.put("id", rs.getLong(1));
+                    people.put("name", rs.getString(2));
+                    people.put("localizationId", rs.getInt(4));
+                    people.put("active", rs.getInt(5));
+                    people.put("image", rs.getBlob(6));
+                    people.put("context", rs.getInt(8));
+                    people.put("authorizedSpeed", rs.getInt(9));
+                    people.put("messagesId", rs.getInt(10));
+                    people.put("avatar", rs.getInt(11));
+                    jSONArrayPeoples.add(people);
                 }
+                cnt++;
+                json.put("peoples", jSONArrayPeoples);
                 
                 String deleteAddPeopleQuery = "delete from add_people where code=" + jsonObject.get("code").toString();
                 ps = connection.prepareStatement(deleteAddPeopleQuery);
