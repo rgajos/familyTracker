@@ -84,7 +84,7 @@ public class ChangeAvatar extends HttpServlet {
                     for(int i = 0 ; i < bytes.length ; ++i) {
                         bytes[i] = Byte.parseByte(bytesString[i]);
 }
-                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE='" + bytes + "' where ID=" + (Long) jsonObject.get("peopleId") ;
+                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE=" + bytes + " where ID=" + (Long) jsonObject.get("peopleId") ;
                 ps = connection.prepareStatement(updatePeopleImageQuery);
                 ps.executeUpdate();
             }
