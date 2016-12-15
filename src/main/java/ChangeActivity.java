@@ -29,9 +29,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "AddPeople", urlPatterns = {"/AddPeople5220"})
-public class AddPeople extends HttpServlet {
-
+@WebServlet(name = "ChangeActivity", urlPatterns = {"/ChangeActivity5220"})
+public class ChangeActivity extends HttpServlet {
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -55,20 +54,27 @@ public class AddPeople extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
-            
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
+
+            String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
+            ps = connection.prepareStatement(getSettingsQuery);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int familyChange = rs.getInt(2);
+                familyChange++;
+                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
+                ps.executeUpdate();
+            }
+
+            String updatePeopleAvatarQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+            ps = connection.prepareStatement(updatePeopleAvatarQuery);
             ps.executeUpdate();
 
             JSONObject json = new JSONObject();
             json.put("error", 0);
             response.getWriter().write(json.toString());
-            
+
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
@@ -84,7 +90,7 @@ public class AddPeople extends HttpServlet {
             json.put("error", 2);
             json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
-        }finally {
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();

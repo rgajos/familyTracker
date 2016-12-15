@@ -68,43 +68,39 @@ public class SyncLocalizations extends HttpServlet {
             
             JSONObject json = new JSONObject();
             cnt++;
-            if((Long)jsonObject.get("active") == 0){
-                cnt++;
-                String updateLocalizationQuery = "update localizations set "
-                        + "LONGITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("longitude"))+ "',"
-                        + "LATITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("latitude")) + "',"
-                        + "TIME='" + jsonObject.get("time").toString() + "',"
-                        + "BATTERY='" + (Long)jsonObject.get("battery") + "',"
-                        + "ACCURACY='" + BigDecimal.valueOf((Double)jsonObject.get("accuracy")) + "'"
-                        + " where ID='" + (Long)jsonObject.get("localizationId") + "'";
-                ps = connection.prepareStatement(updateLocalizationQuery);
-                ps.executeUpdate();
-                cnt++;
-            }
             cnt++;
-            if ((Long) jsonObject.get("memberContext") != 0) {
+            String updateLocalizationQuery = "update localizations set "
+                    + "LONGITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("longitude"))+ "',"
+                    + "LATITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("latitude")) + "',"
+                    + "TIME='" + jsonObject.get("time").toString() + "',"
+                    + "BATTERY='" + (Long)jsonObject.get("battery") + "',"
+                    + "ACCURACY='" + BigDecimal.valueOf((Double)jsonObject.get("accuracy")) + "'"
+                    + " where ID='" + (Long)jsonObject.get("localizationId") + "'";
+            ps = connection.prepareStatement(updateLocalizationQuery);
+            ps.executeUpdate();
+            cnt++;
+            cnt++;
                 cnt++;
-                if(jsonObject.get("peoplesLocalizationId").toString().length() > 0){
-                    JSONArray localizationJSONArray = new JSONArray();
-                    
-                    String getLocalizationsQuery = "select * from localizations where ID in (" + jsonObject.get("peoplesLocalizationId").toString() + ")";
-                    ps = connection.prepareStatement(getLocalizationsQuery);
-                    rs = ps.executeQuery();
-                    while(rs.next()){
-                        JSONObject localization = new JSONObject();
-                        localization.put("id", rs.getLong(1));
-                        localization.put("longitude", rs.getDouble(2));
-                        localization.put("latitude", rs.getDouble(3));
-                        localization.put("time", rs.getString(4));
-                        localization.put("battery", rs.getInt(5));
-                        localization.put("accuracy", rs.getFloat(6));
-                        localization.put("peopleId", rs.getLong(7));
-                        cnt++;
-                        localizationJSONArray.add(localization);
+            if(jsonObject.get("peoplesLocalizationId").toString().length() > 0){
+                JSONArray localizationJSONArray = new JSONArray();
 
-                    }
-                    json.put("localizations", localizationJSONArray);
+                String getLocalizationsQuery = "select * from localizations where ID in (" + jsonObject.get("peoplesLocalizationId").toString() + ")";
+                ps = connection.prepareStatement(getLocalizationsQuery);
+                rs = ps.executeQuery();
+                while(rs.next()){
+                    JSONObject localization = new JSONObject();
+                    localization.put("id", rs.getLong(1));
+                    localization.put("longitude", rs.getDouble(2));
+                    localization.put("latitude", rs.getDouble(3));
+                    localization.put("time", rs.getString(4));
+                    localization.put("battery", rs.getInt(5));
+                    localization.put("accuracy", rs.getFloat(6));
+                    localization.put("peopleId", rs.getLong(7));
+                    cnt++;
+                    localizationJSONArray.add(localization);
+
                 }
+                json.put("localizations", localizationJSONArray);
             }
             
             JSONObject jsonSettings = new JSONObject();

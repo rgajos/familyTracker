@@ -71,6 +71,7 @@ public class SignIn extends HttpServlet {
                     
                     JSONObject json = new JSONObject();
                     JSONObject jsonSettings = new JSONObject();
+                    JSONObject jsonMessages = new JSONObject();
                     JSONArray jSONArrayPeoples = new JSONArray();
                     JSONArray jSONArrayPlaces = new JSONArray();
                     JSONArray jSONArrayPlace2People = new JSONArray();
@@ -87,6 +88,15 @@ public class SignIn extends HttpServlet {
                         jsonSettings.put("notifications", rs.getString(5));
                         jsonSettings.put("userId", rs.getLong(6));
                     }
+                    
+                    String getMessagesQuery = "select * from messages where USER_ID='" + userId + "'";
+                    ps = connection.prepareStatement(getMessagesQuery);
+                    rs = ps.executeQuery();
+
+                    if (rs.next()) {
+                        jsonMessages.put("id", rs.getLong(1));
+                        jsonMessages.put("msg", rs.getString(2));
+                    }
                    
                     String getPeopleQuery = "select * from people where USER_ID='" + userId + "'";
                     ps = connection.prepareStatement(getPeopleQuery);
@@ -102,7 +112,8 @@ public class SignIn extends HttpServlet {
                         people.put("image", rs.getBlob(6));
                         people.put("context", rs.getInt(8));
                         people.put("authorizedSpeed", rs.getInt(9));
-                        
+                        people.put("messagesId", rs.getInt(10));
+                        people.put("avatar", rs.getInt(11));
                         jSONArrayPeoples.add(people);
                     }
 
@@ -136,6 +147,7 @@ public class SignIn extends HttpServlet {
                     json.put("settings", jsonSettings);
                     json.put("peoples", jSONArrayPeoples);
                     json.put("places", jSONArrayPlaces);
+                    json.put("messages", jsonMessages);
                     json.put("place2Peoples", jSONArrayPlace2People);
                     json.put("error", 0);
                     response.getWriter().write(json.toString());

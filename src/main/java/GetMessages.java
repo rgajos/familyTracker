@@ -11,7 +11,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,6 +22,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -29,8 +30,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "AddPeople", urlPatterns = {"/AddPeople5220"})
-public class AddPeople extends HttpServlet {
+@WebServlet(name = "GetMessages", urlPatterns = {"/GetMessages5220"})
+public class GetMessages extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -55,20 +56,26 @@ public class AddPeople extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
-            
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.executeUpdate();
 
-            JSONObject json = new JSONObject();
-            json.put("error", 0);
-            response.getWriter().write(json.toString());
-            
+            String getMessagesQuery = "select * from messages where ID=" + (Long)jsonObject.get("messagesId");
+            ps = connection.prepareStatement(getMessagesQuery);
+            ResultSet rs = ps.executeQuery();
+
+            String msg = "";
+
+            if (rs.next()) {
+                msg = rs.getString(2);
+                JSONObject json = new JSONObject();
+                json.put("msg", msg);
+                json.put("error", 0);
+                response.getWriter().write(json.toString());
+            } else {
+                JSONObject json = new JSONObject();
+                json.put("error", 1);
+                json.put("desc", "");
+                response.getWriter().write(json.toString());
+            }
+
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
@@ -84,7 +91,7 @@ public class AddPeople extends HttpServlet {
             json.put("error", 2);
             json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
-        }finally {
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();

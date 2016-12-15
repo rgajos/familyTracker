@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -12,6 +13,10 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Random;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -29,8 +34,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "AddPeople", urlPatterns = {"/AddPeople5220"})
-public class AddPeople extends HttpServlet {
+@WebServlet(name = "SendMessage", urlPatterns = {"/SendMessage5220"})
+public class SendMessage extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -56,19 +61,53 @@ public class AddPeople extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
-            
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.executeUpdate();
-
             JSONObject json = new JSONObject();
-            json.put("error", 0);
+            
+            String getMessagesquery = "select MSG from messages where ID=" + (Long)jsonObject.get("messagesId");
+            ps = connection.prepareStatement(getMessagesquery);
+            ResultSet rs = ps.executeQuery();
+            
+            if(rs.next()){
+                Gson gson = new Gson();
+                ArrayList serverMessages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(1), Message[].class)));
+                
+                if(serverMessages.size() > 19){
+                    serverMessages.remove(0);
+                }
+                
+                Message message = new Message(jsonObject.get("message").toString(), (Long)jsonObject.get("peopleId"), jsonObject.get("time").toString());
+                serverMessages.add(message);
+                
+                String actualMessages = gson.toJson(serverMessages);
+                
+                String updateMessagesQuery = "update messages set MSG='" + actualMessages + "' where ID=" + (Long)jsonObject.get("messagesId");
+                ps = connection.prepareStatement(updateMessagesQuery);
+                ps.executeUpdate();
+                
+                json.put("error", 0);
+                
+                String getSettingsQuery = "select * from settings where ID=" + (Long)jsonObject.get("settingsId");
+                ps = connection.prepareStatement(getSettingsQuery);
+                rs = ps.executeQuery();
+
+                int messageCounter = 0;
+                
+                if (rs.next()) {
+                    messageCounter = rs.getInt(7);
+                    messageCounter++;
+                }
+                String updateFamilyChangeQuery = "update settings set MSG_COUNTER='" + messageCounter + "' where ID="+ (Long) jsonObject.get("settingsId");
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
+                ps.executeUpdate();
+                
+            }else{
+                json.put("error", 1);
+                json.put("desc", "Try Again");
+            }
+            
             response.getWriter().write(json.toString());
             
+
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
@@ -84,7 +123,7 @@ public class AddPeople extends HttpServlet {
             json.put("error", 2);
             json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
-        }finally {
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();

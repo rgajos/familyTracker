@@ -24,13 +24,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.postgresql.util.Base64;
 
 /**
  *
  * @author Radek
  */
-@WebServlet(name = "AddPeople", urlPatterns = {"/AddPeople5220"})
-public class AddPeople extends HttpServlet {
+@WebServlet(name = "ChangeAvatar", urlPatterns = {"/ChangeAvatar5220"})
+public class ChangeAvatar extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,6 +48,8 @@ public class AddPeople extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
+        
+        int cnt = 0;
         try {
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
@@ -55,20 +58,37 @@ public class AddPeople extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
-            
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.executeUpdate();
 
+            String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
+            ps = connection.prepareStatement(getSettingsQuery);
+            ResultSet rs = ps.executeQuery();
+
+            cnt ++;
+            if (rs.next()) {
+                int familyChange = rs.getInt(2);
+                familyChange++;
+                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
+                ps.executeUpdate();
+            }
+            cnt++;
+            if((Long) jsonObject.get("avatar") > 0){
+                cnt++;
+                String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                ps = connection.prepareStatement(updatePeopleAvatarQuery);
+                ps.executeUpdate();
+            }else{
+                cnt++;
+                byte[] byteArrayPhoto = Base64.decode((String) jsonObject.get("photo"));
+                String updatePeopleImageQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "', IMAGE='" + byteArrayPhoto + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                ps = connection.prepareStatement(updatePeopleImageQuery);
+                ps.executeUpdate();
+            }
+            cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
             response.getWriter().write(json.toString());
-            
+
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
@@ -84,7 +104,12 @@ public class AddPeople extends HttpServlet {
             json.put("error", 2);
             json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
-        }finally {
+        } catch (Exception ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage()+cnt);
+            response.getWriter().write(json.toString());
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();

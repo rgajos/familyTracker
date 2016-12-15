@@ -70,6 +70,12 @@
 	  <version>1.4.7</version>
 	  <type>jar</type>
 	 </dependency>
+	 <dependency>
+	  <groupId>caja</groupId>
+	  <artifactId>json_simple</artifactId>
+	  <version>r1</version>
+	  <type>jar</type>
+	 </dependency>
 	</dependencies>
 	<profiles>
 		<profile>

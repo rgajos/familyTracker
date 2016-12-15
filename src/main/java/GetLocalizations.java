@@ -4,14 +4,19 @@
  * and open the template in the editor.
  */
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Random;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -29,8 +35,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "AddPeople", urlPatterns = {"/AddPeople5220"})
-public class AddPeople extends HttpServlet {
+@WebServlet(name = "GetLocalizations", urlPatterns = {"/GetLocalizations5220"})
+public class GetLocalizations extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,7 +53,10 @@ public class AddPeople extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
+        int cnt = 0;
+        StringBuilder sb = new StringBuilder();
         try {
+
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
@@ -55,36 +64,109 @@ public class AddPeople extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
-            
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.executeUpdate();
+            ResultSet rs;
 
             JSONObject json = new JSONObject();
+            cnt++;
+
+            cnt++;
+                cnt++;
+            if (jsonObject.get("peoplesLocalizationId").toString().length() > 0) {
+                JSONArray localizationJSONArray = new JSONArray();
+
+                String getLocalizationsQuery = "select * from localizations where ID in (" + jsonObject.get("peoplesLocalizationId").toString() + ")";
+                ps = connection.prepareStatement(getLocalizationsQuery);
+                rs = ps.executeQuery();
+                while (rs.next()) {
+                    JSONObject localization = new JSONObject();
+                    localization.put("id", rs.getLong(1));
+                    localization.put("longitude", rs.getDouble(2));
+                    localization.put("latitude", rs.getDouble(3));
+                    localization.put("time", rs.getString(4));
+                    localization.put("battery", rs.getInt(5));
+                    localization.put("accuracy", rs.getFloat(6));
+                    localization.put("peopleId", rs.getLong(7));
+                    cnt++;
+                    localizationJSONArray.add(localization);
+
+                }
+                json.put("localizations", localizationJSONArray);
+            }
+
+            JSONObject jsonSettings = new JSONObject();
+
+            String getSettingsQuery = "select * from settings where ID='" + jsonObject.get("settingId").toString() + "'";
+            ps = connection.prepareStatement(getSettingsQuery);
+            rs = ps.executeQuery();
+
+            cnt++;
+            if (rs.next()) {
+                jsonSettings.put("familyChange", rs.getInt(2));
+                jsonSettings.put("placesChange", rs.getInt(3));
+                jsonSettings.put("gpsRefresh", rs.getInt(4));
+                jsonSettings.put("notifications", rs.getString(5));
+
+            }
+
+            if ((Boolean) jsonObject.get("deletedNotification")) {
+
+                Gson gson = new Gson();
+                ArrayList serverNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(rs.getString(5), Notification[].class)));
+
+                int notificationSize = serverNotifications.size();
+
+                if (notificationSize > 0) {
+
+                    Notification[] notifications = gson.fromJson(jsonObject.get("notifications").toString(), Notification[].class);
+
+                    for (Iterator<Notification> iterator = serverNotifications.iterator(); iterator.hasNext();) {
+                        Notification serverNotification = iterator.next();
+                        for (Notification notification : notifications) {
+                            if (notification.getTime().equals(serverNotification.getTime())) {
+                                iterator.remove();
+                            }
+                        }
+                    }
+                    if (notificationSize > serverNotifications.size()) {
+                        String actualNotifications = gson.toJson(serverNotifications);
+                        jsonSettings.put("notifications", actualNotifications);
+
+                        String updateNotificationQuery = "update settings set NOTIFICATIONS='" + actualNotifications + "' where ID='" + jsonObject.get("settingId").toString() + "'";
+                        ps = connection.prepareStatement(updateNotificationQuery);
+                        ps.executeUpdate();
+                    }
+                }
+            }
+
+            cnt++;
+            sb.append("jsettings: " + jsonSettings.toString());
+            json.put("settings", jsonSettings);
+            cnt++;
             json.put("error", 0);
+            cnt++;
             response.getWriter().write(json.toString());
-            
+            cnt++;
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage());
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } catch (NamingException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage());
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } catch (SQLException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage());
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
-        }finally {
+        } catch (Exception ex) {
+            JSONObject json = new JSONObject();
+            json.put("error", 2);
+            json.put("desc", ex.getMessage() + cnt + sb);
+            response.getWriter().write(json.toString());
+        } finally {
             try {
                 if (connection != null) {
                     connection.close();

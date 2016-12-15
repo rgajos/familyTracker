@@ -93,13 +93,28 @@ public class Register extends HttpServlet {
                     if (generatedKeys.next()) {
                         localizationId = generatedKeys.getInt(1);
                     }
+                    Gson gson = new Gson();
+                    List<Message> messages = new ArrayList<Message>();
                     
-                    String insertPeopleQuery = "insert into people (name, user_id, localization_id, context) values (?,?,?,?)";
+                    String insertMessagesQuery = "insert into messages (msg, user_id) values (?,?)";
+                    ps = connection.prepareStatement(insertMessagesQuery, Statement.RETURN_GENERATED_KEYS);
+                    ps.setString(1, gson.toJson(messages));
+                    ps.setLong(2, userId);
+                    ps.executeUpdate();
+
+                    generatedKeys = ps.getGeneratedKeys();
+                    long messagesId = 0;
+                    if (generatedKeys.next()) {
+                        messagesId = generatedKeys.getInt(1);
+                    }
+                    
+                    String insertPeopleQuery = "insert into people (name, user_id, localization_id, context, messages_id) values (?,?,?,?,?)";
                     ps = connection.prepareStatement(insertPeopleQuery, Statement.RETURN_GENERATED_KEYS);
                     ps.setString(1, jsonObject.get("name").toString());
                     ps.setLong(2, userId);
                     ps.setLong(3, localizationId);
                     ps.setInt(4,2);
+                    ps.setLong(5, messagesId);
                     ps.executeUpdate();
 
                     generatedKeys = ps.getGeneratedKeys();
@@ -117,8 +132,7 @@ public class Register extends HttpServlet {
                     ps = connection.prepareStatement(insertSettingsQuery, Statement.RETURN_GENERATED_KEYS);
                     
                     List<Notification> notifications = new ArrayList<Notification>();
-                    Gson gson = new Gson();
-                    
+
                     ps.setString(1, gson.toJson(notifications));
                     ps.setLong(2, userId);
                     ps.executeUpdate();
@@ -136,6 +150,7 @@ public class Register extends HttpServlet {
                     json.put("name", jsonObject.get("name").toString());
                     json.put("localizationId", localizationId);
                     json.put("settingsId", settingsId);
+                    json.put("messagesId", messagesId);
 
                     response.getWriter().write(json.toString());
                 }
