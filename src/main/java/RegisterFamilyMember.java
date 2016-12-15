@@ -201,9 +201,9 @@ public class RegisterFamilyMember extends HttpServlet {
                 cnt++;
                 json.put("peoples", jSONArrayPeoples);
                 
-                String deleteAddPeopleQuery = "delete from add_people where code=" + jsonObject.get("code").toString();
-                ps = connection.prepareStatement(deleteAddPeopleQuery);
-                ps.executeUpdate();
+                //String deleteAddPeopleQuery = "delete from add_people where code=" + jsonObject.get("code").toString();
+                //ps = connection.prepareStatement(deleteAddPeopleQuery);
+                //ps.executeUpdate();
                 cnt++;
                 json.put("settings", jsonSettings);
                 json.put("messages", jsonMessages);
