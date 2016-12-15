@@ -67,20 +67,20 @@ public class ChangeAvatar extends HttpServlet {
             if (rs.next()) {
                 int familyChange = rs.getInt(2);
                 familyChange++;
-                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE=" + familyChange + " where ID=" + (Long) jsonObject.get("settingsId");
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
             }
             cnt++;
             if((Long) jsonObject.get("avatar") > 0){
                 cnt++;
-                String updatePeopleAvatarQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                String updatePeopleAvatarQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + " where ID=" + (Long) jsonObject.get("peopleId");
                 ps = connection.prepareStatement(updatePeopleAvatarQuery);
                 ps.executeUpdate();
             }else{
                 cnt++;
                 byte[] byteArrayPhoto = Base64.decode((String) jsonObject.get("photo"));
-                String updatePeopleImageQuery = "update people set AVATAR='" + (Long) jsonObject.get("avatar") + "', IMAGE='" + byteArrayPhoto + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE=" + byteArrayPhoto + " where ID=" + (Long) jsonObject.get("peopleId") ;
                 ps = connection.prepareStatement(updatePeopleImageQuery);
                 ps.executeUpdate();
             }
