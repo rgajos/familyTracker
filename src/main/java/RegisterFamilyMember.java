@@ -7,6 +7,7 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -184,9 +185,10 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
                     
-                    int blobLength = (int) rs.getBlob(6).length();  
-                    byte[] blobAsBytes = rs.getBlob(6).getBytes(1, blobLength);
-                    String photo = Base64.encodeBytes(blobAsBytes, 0);
+                    Blob blob =  rs.getBlob(6);
+                    
+                    byte[] imageBytes = blob.getBytes(1, (int) blob.length());
+                    String photo = imageBytes.toString();
                     
                     people.put("image", photo);
                     people.put("context", rs.getInt(8));
