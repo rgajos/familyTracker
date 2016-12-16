@@ -109,7 +109,7 @@ public class SignIn extends HttpServlet {
                         people.put("name", rs.getString(2));
                         people.put("localizationId", rs.getLong(4));
                         people.put("active", rs.getInt(5));
-                        people.put("image", rs.getBlob(6));
+                        people.put("image", rs.getString(6));
                         people.put("context", rs.getInt(8));
                         people.put("authorizedSpeed", rs.getInt(9));
                         people.put("messagesId", rs.getInt(10));

@@ -184,17 +184,7 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("name", rs.getString(2));
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
-                    
-                    Blob blob =  rs.getBlob(6);
-                    if(blob != null){
-                    byte[] imageBytes = blob.getBytes(1, (int) blob.length());
-
-                    String photo = imageBytes.toString();
-                    people.put("image", photo);
-                    }
-                     cnt++;
-                     cnt++;
-
+                    people.put("image", rs.getString(6));
                     people.put("context", rs.getInt(8));
                     people.put("authorizedSpeed", rs.getInt(9));
                     people.put("messagesId", rs.getInt(10));
