@@ -61,16 +61,8 @@ public class EditPlace extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             cnt++;
-            String replacePlaceQuery = "replace into places (id, radius, longitude, latitude, user_id) values (?,?,?,?,?,?)";
+            String replacePlaceQuery = "update places set name='" + jsonObject.get("name").toString() +"' , radius=" +(Long) jsonObject.get("radius") +" , longitude="+ (Double) jsonObject.get("longitude")+ " , latitude="+ (Double) jsonObject.get("latitude") +" where ID=" + (Long) jsonObject.get("placeId");
             ps = connection.prepareStatement(replacePlaceQuery);
-            cnt++;
-            ps.setLong(1, (Long) jsonObject.get("placeId"));
-            ps.setString(2, jsonObject.get("name").toString());
-            ps.setLong(3, (Long) jsonObject.get("radius"));
-            ps.setDouble(4, (Double) jsonObject.get("longitude"));
-            ps.setDouble(5, (Double) jsonObject.get("latitude"));
-            ps.setLong(6, (Long) jsonObject.get("userId"));
-            cnt++;
             ps.executeUpdate();
             cnt++;
 
