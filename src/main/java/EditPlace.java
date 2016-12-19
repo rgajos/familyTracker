@@ -70,7 +70,7 @@ public class EditPlace extends HttpServlet {
             JSONArray jsonArray = (JSONArray) jsonObject.get("peopleIds");
             cnt++;
             
-            String deletePlace2PeopleQuery = "delete from place2people where ID=" + (Long) jsonObject.get("placeId");
+            String deletePlace2PeopleQuery = "delete from place2people where PLACES_ID=" + (Long) jsonObject.get("placeId");
             ps = connection.prepareStatement(deletePlace2PeopleQuery);
             ps.executeUpdate();
             
