@@ -63,19 +63,19 @@ public class EditMyAccount extends HttpServlet {
             cnt++;
             
             if((Long) jsonObject.get("context") == 0){
-                String updatePeopleQuery = "update people set name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                String updatePeopleQuery = "update people set name=" + jsonObject.get("name").toString() + " where ID=" + (Long) jsonObject.get("peopleId");
                 ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }else if ((Long) jsonObject.get("context") == 1) {
-                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + jsonObject.get("name").toString() + " where ID=" + (Long) jsonObject.get("peopleId");
                 ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }else{
-                String updateUserQuery = "update user set name='" + jsonObject.get("name").toString() + "' , password=" + (Long) jsonObject.get("password") +  " where ID=" + (Long) jsonObject.get("userId");
+                String updateUserQuery = "update user set name='" + jsonObject.get("name").toString() + "' , password=" + jsonObject.get("password").toString() +  " where ID=" + (Long) jsonObject.get("userId");
                 ps = connection.prepareStatement(updateUserQuery);
                 ps.executeUpdate();
                 
-                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + jsonObject.get("name").toString() + " where ID=" + (Long) jsonObject.get("peopleId");
                 ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }
