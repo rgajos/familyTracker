@@ -7,11 +7,13 @@
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Random;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -22,6 +24,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -29,8 +32,8 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "ChangeAvatar", urlPatterns = {"/ChangeAvatar5220"})
-public class ChangeAvatar extends HttpServlet {
+@WebServlet(name = "EditMyAccount", urlPatterns = {"/EditMyAccount5220"})
+public class EditMyAccount extends HttpServlet {
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -47,7 +50,7 @@ public class ChangeAvatar extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
-        
+
         int cnt = 0;
         try {
             BufferedReader bufferedReader = request.getReader();
@@ -57,17 +60,23 @@ public class ChangeAvatar extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-
-           
             cnt++;
-            if((Long) jsonObject.get("avatar") > 0){
-                cnt++;
-                String updatePeopleAvatarQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + " where ID=" + (Long) jsonObject.get("peopleId");
-                ps = connection.prepareStatement(updatePeopleAvatarQuery);
+            
+            if((Long) jsonObject.get("context") == 0){
+                String updatePeopleQuery = "update people set name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                ps = connection.prepareStatement(updatePeopleQuery);
+                ps.executeUpdate();
+            }else if ((Long) jsonObject.get("context") == 1) {
+                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }else{
-                String updatePeopleImageQuery = "update people set AVATAR=" + (Long) jsonObject.get("avatar") + ", IMAGE='" + (String) jsonObject.get("photo") + "' where ID=" + (Long) jsonObject.get("peopleId") ;
-                ps = connection.prepareStatement(updatePeopleImageQuery);
+                String updateUserQuery = "update user set name='" + jsonObject.get("name").toString() + "' , password=" + (Long) jsonObject.get("password") +  " where ID=" + (Long) jsonObject.get("userId");
+                ps = connection.prepareStatement(updateUserQuery);
+                ps.executeUpdate();
+                
+                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name=" + (Long) jsonObject.get("name") + " where ID=" + (Long) jsonObject.get("peopleId");
+                ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }
             
@@ -83,6 +92,7 @@ public class ChangeAvatar extends HttpServlet {
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
             }
+
             cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
@@ -106,7 +116,7 @@ public class ChangeAvatar extends HttpServlet {
         } catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+cnt);
+            json.put("desc", ex.getMessage() + cnt);
             response.getWriter().write(json.toString());
         } finally {
             try {
