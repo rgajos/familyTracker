@@ -12,15 +12,15 @@ public class Notification {
 
     private String time;
     private String msg;
-    private long notificationPeopleId;
+    private long notificationId;
 
     public Notification() {
     }
 
-    public Notification(String time, String msg, long peopleId) {
+    public Notification(String time, String msg, long notificationId) {
         this.time = time;
         this.msg = msg;
-        this.notificationPeopleId = peopleId;
+        this.notificationId = notificationId;
     }
 
     public String getTime() {
@@ -39,12 +39,12 @@ public class Notification {
         this.msg = msg;
     }
 
-    public long getPeopleId() {
-        return notificationPeopleId;
+    public long getNotificationId() {
+        return notificationId;
     }
 
-    public void setPeopleId(long peopleId) {
-        this.notificationPeopleId = peopleId;
+    public void setNotificationId(long notificationId) {
+        this.notificationId = notificationId;
     }
     
     

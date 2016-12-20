@@ -157,7 +157,7 @@ public class SyncLocalizations extends HttpServlet {
                 Notification notification = new Notification();
                 notification.setTime(jsonObject.get("notificationTime").toString());
                 notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setPeopleId((Long)jsonObject.get("notificationPeopleId"));
+                notification.setNotificationId((Long)jsonObject.get("notificationId"));
                 serverNotifications.add(notification);
                 
                 String actualNotifications = gson.toJson(serverNotifications);
@@ -198,7 +198,7 @@ public class SyncLocalizations extends HttpServlet {
                 Notification notification = new Notification();
                 notification.setTime(jsonObject.get("notificationTime").toString());
                 notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setPeopleId((Long) jsonObject.get("notificationPeopleId"));
+                notification.setNotificationId((Long) jsonObject.get("notificationId"));
                 sb.append("zrobil notification");
                 cnt++;
                 serverNotifications.add(notification);
