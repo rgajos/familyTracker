@@ -54,6 +54,18 @@ public class ChangeActivity extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
+            
+            String getPeopleQuery = "select * from people where ID='" + (Long) jsonObject.get("peopleId") + "' AND password ='" + jsonObject.get("peopleId").toString() + "'";
+            ps = connection.prepareStatement(getPeopleQuery);
+            ResultSet rs = ps.executeQuery();
+
+            if (rs.next()) {
+                int familyChange = rs.getInt(2);
+                familyChange++;
+                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
+                ps.executeUpdate();
+            }
 
             String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
             ps = connection.prepareStatement(getSettingsQuery);
@@ -66,6 +78,7 @@ public class ChangeActivity extends HttpServlet {
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
             }
+           
 
             String updatePeopleAvatarQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
             ps = connection.prepareStatement(updatePeopleAvatarQuery);
