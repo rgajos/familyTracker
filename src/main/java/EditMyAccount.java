@@ -68,7 +68,7 @@ public class EditMyAccount extends HttpServlet {
                 ps.executeUpdate();
             }else if ((Long) jsonObject.get("context") == 1) {
                 if((Long) jsonObject.get("active") == 1){
-                    String updatePeopleQuery = "update people set active=" + (Long) jsonObject.get("active") + " , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    String updatePeopleQuery = "update people set active=" + (Long) jsonObject.get("active") + " , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("myLocationPassword").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
                     ps = connection.prepareStatement(updatePeopleQuery);
                     ps.executeUpdate();
                 }else{
@@ -83,7 +83,7 @@ public class EditMyAccount extends HttpServlet {
                 ps.executeUpdate();
                 
                 if ((Long) jsonObject.get("active") == 1) {
-                    String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("myLocationPassword").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
                     ps = connection.prepareStatement(updatePeopleQuery);
                     ps.executeUpdate();
                 }else{
