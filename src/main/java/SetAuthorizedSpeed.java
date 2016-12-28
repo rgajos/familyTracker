@@ -29,8 +29,9 @@ import org.json.simple.JSONValue;
  *
  * @author Radek
  */
-@WebServlet(name = "ChangeActivity", urlPatterns = {"/ChangeActivity5220"})
-public class ChangeActivity extends HttpServlet {
+@WebServlet(name = "SetAuthorizedSpeed", urlPatterns = {"/SetAuthorizedSpeed5220"})
+public class SetAuthorizedSpeed extends HttpServlet {
+
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -54,38 +55,26 @@ public class ChangeActivity extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String getPeopleQuery = "select * from people where ID='" + (Long) jsonObject.get("peopleId") + "' AND password ='" + jsonObject.get("password").toString() + "'";
-            ps = connection.prepareStatement(getPeopleQuery);
+
+            String getSettingsQuery = "select * from settings where ID=" + (Long) jsonObject.get("settingsId");
+            ps = connection.prepareStatement(getSettingsQuery);
             ResultSet rs = ps.executeQuery();
 
             if (rs.next()) {
-                
-                String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
-                ps = connection.prepareStatement(getSettingsQuery);
-                rs = ps.executeQuery();
-
-                if (rs.next()) {
-                    int familyChange = rs.getInt(2);
-                    familyChange++;
-                    String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
-                    ps = connection.prepareStatement(updateFamilyChangeQuery);
-                    ps.executeUpdate();
-                }
-
-                String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
-                ps = connection.prepareStatement(updatePeopleActiveQuery);
+                int familyChange = rs.getInt(2);
+                familyChange++;
+                String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE=" + familyChange + " where ID=" + (Long) jsonObject.get("settingsId");
+                ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
-
-                JSONObject json = new JSONObject();
-                json.put("error", 0);
-                response.getWriter().write(json.toString());
-            }else{
-                JSONObject json = new JSONObject();
-                json.put("error", 1);
-                response.getWriter().write(json.toString());
             }
 
+            String updatePeopleAuthorizedSpeedQuery = "update people set AUTHORIZED_SPEED=" + (Long) jsonObject.get("speed") + " where ID=" + (Long) jsonObject.get("peopleId");
+            ps = connection.prepareStatement(updatePeopleAuthorizedSpeedQuery);
+            ps.executeUpdate();
+
+            JSONObject json = new JSONObject();
+            json.put("error", 0);
+            response.getWriter().write(json.toString());
 
 
         } catch (IOException ex) {
