@@ -67,17 +67,30 @@ public class EditMyAccount extends HttpServlet {
                 ps = connection.prepareStatement(updatePeopleQuery);
                 ps.executeUpdate();
             }else if ((Long) jsonObject.get("context") == 1) {
-                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
-                ps = connection.prepareStatement(updatePeopleQuery);
-                ps.executeUpdate();
+                if((Long) jsonObject.get("active") == 1){
+                    String updatePeopleQuery = "update people set active=" + (Long) jsonObject.get("active") + " , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    ps = connection.prepareStatement(updatePeopleQuery);
+                    ps.executeUpdate();
+                }else{
+                    String updatePeopleQuery = "update people set active=" + (Long) jsonObject.get("active") + " , name='" + jsonObject.get("name").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    ps = connection.prepareStatement(updatePeopleQuery);
+                    ps.executeUpdate();
+                }
+
             }else{
                 String updateUserQuery = "update user set name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() +  "' where ID=" + (Long) jsonObject.get("userId");
                 ps = connection.prepareStatement(updateUserQuery);
                 ps.executeUpdate();
                 
-                String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
-                ps = connection.prepareStatement(updatePeopleQuery);
-                ps.executeUpdate();
+                if ((Long) jsonObject.get("active") == 1) {
+                    String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    ps = connection.prepareStatement(updatePeopleQuery);
+                    ps.executeUpdate();
+                }else{
+                    String updatePeopleQuery = "update people set active='" + jsonObject.get("active").toString() + "' , name='" + jsonObject.get("name").toString() + "' where ID=" + (Long) jsonObject.get("peopleId");
+                    ps = connection.prepareStatement(updatePeopleQuery);
+                    ps.executeUpdate();
+                }
             }
             
             String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
