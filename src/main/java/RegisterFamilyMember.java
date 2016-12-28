@@ -185,6 +185,7 @@ public class RegisterFamilyMember extends HttpServlet {
                     people.put("localizationId", rs.getInt(4));
                     people.put("active", rs.getInt(5));
                     people.put("image", rs.getString(6));
+                    people.put("password", rs.getString(7));
                     people.put("context", rs.getInt(8));
                     people.put("authorizedSpeed", rs.getInt(9));
                     people.put("messagesId", rs.getInt(10));
