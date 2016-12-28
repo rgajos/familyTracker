@@ -55,38 +55,61 @@ public class ChangeActivity extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             
-            String getPeopleQuery = "select * from people where ID='" + (Long) jsonObject.get("peopleId") + "' AND password ='" + jsonObject.get("password").toString() + "'";
-            ps = connection.prepareStatement(getPeopleQuery);
+            String getPeoplePasswordQuery = "select * from people where ID=" + (Long) jsonObject.get("peopleId");
+            ps = connection.prepareStatement(getPeoplePasswordQuery);
             ResultSet rs = ps.executeQuery();
-
+            
             if (rs.next()) {
+                String password = rs.getString(7);
                 
-                String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
-                ps = connection.prepareStatement(getSettingsQuery);
-                rs = ps.executeQuery();
+                if(password.equals("empty5220")){
+                    String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                    ps = connection.prepareStatement(getSettingsQuery);
+                    rs = ps.executeQuery();
 
-                if (rs.next()) {
-                    int familyChange = rs.getInt(2);
-                    familyChange++;
-                    String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
-                    ps = connection.prepareStatement(updateFamilyChangeQuery);
+                    if (rs.next()) {
+                        int familyChange = rs.getInt(2);
+                        familyChange++;
+                        String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                        ps = connection.prepareStatement(updateFamilyChangeQuery);
+                        ps.executeUpdate();
+                    }
+
+                    String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                    ps = connection.prepareStatement(updatePeopleActiveQuery);
                     ps.executeUpdate();
+
+                    JSONObject json = new JSONObject();
+                    json.put("error", 0);
+                    response.getWriter().write(json.toString());
+                    
+                }else if (password.equals(jsonObject.get("password").toString())){
+                    String getSettingsQuery = "select * from settings where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                    ps = connection.prepareStatement(getSettingsQuery);
+                    rs = ps.executeQuery();
+
+                    if (rs.next()) {
+                        int familyChange = rs.getInt(2);
+                        familyChange++;
+                        String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='" + familyChange + "' where ID='" + (Long) jsonObject.get("settingsId") + "'";
+                        ps = connection.prepareStatement(updateFamilyChangeQuery);
+                        ps.executeUpdate();
+                    }
+
+                    String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                    ps = connection.prepareStatement(updatePeopleActiveQuery);
+                    ps.executeUpdate();
+
+                    JSONObject json = new JSONObject();
+                    json.put("error", 0);
+                    response.getWriter().write(json.toString());
+                    
+                }else{
+                    JSONObject json = new JSONObject();
+                    json.put("error", 1);
+                    response.getWriter().write(json.toString());
                 }
-
-                String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
-                ps = connection.prepareStatement(updatePeopleActiveQuery);
-                ps.executeUpdate();
-
-                JSONObject json = new JSONObject();
-                json.put("error", 0);
-                response.getWriter().write(json.toString());
-            }else{
-                JSONObject json = new JSONObject();
-                json.put("error", 1);
-                response.getWriter().write(json.toString());
             }
-
-
 
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
