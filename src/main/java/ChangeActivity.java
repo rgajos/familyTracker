@@ -75,7 +75,7 @@ public class ChangeActivity extends HttpServlet {
                         ps.executeUpdate();
                     }
 
-                    String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                    String updatePeopleActiveQuery = "update people set ACTIVE=0, AND PASSWORD='empty5220' where ID=" + (Long) jsonObject.get("peopleId") ;
                     ps = connection.prepareStatement(updatePeopleActiveQuery);
                     ps.executeUpdate();
 
@@ -96,7 +96,7 @@ public class ChangeActivity extends HttpServlet {
                         ps.executeUpdate();
                     }
 
-                    String updatePeopleActiveQuery = "update people set ACTIVE='" + (Long) jsonObject.get("active") + "' where ID='" + (Long) jsonObject.get("peopleId") + "'";
+                    String updatePeopleActiveQuery = "update people set ACTIVE=0, AND PASSWORD='empty5220' where ID='" + (Long) jsonObject.get("peopleId") + "'";
                     ps = connection.prepareStatement(updatePeopleActiveQuery);
                     ps.executeUpdate();
 
