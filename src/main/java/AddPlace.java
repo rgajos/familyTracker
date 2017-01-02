@@ -100,6 +100,8 @@ cnt++;
                 place2people.put("id", places2peopleId);
                 place2people.put("placeId", placesId);
                 place2people.put("peopleId", Long.valueOf(jsonArray.get(i).toString()));
+                
+                place2peopleJSONArray.add(place2people);
             }
             
             String getSettingsQuery = "select * from settings where ID=" + (Long) jsonObject.get("settingsId");
