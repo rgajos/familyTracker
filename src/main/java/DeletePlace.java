@@ -56,7 +56,7 @@ public class DeletePlace extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
 
-            String deletePlaceQuery = "delete from place where ID=" + (Long) jsonObject.get("placeId");
+            String deletePlaceQuery = "delete from places where ID=" + (Long) jsonObject.get("placeId");
             ps = connection.prepareStatement(deletePlaceQuery);
             ps.executeUpdate();
 
@@ -77,7 +77,7 @@ public class DeletePlace extends HttpServlet {
                 placeChange++;
             }
 
-            String updateFamilyChangeQuery = "update settings set FAMILY_PLACE=" + placeChange + " where ID=" + (Long) jsonObject.get("settingsId");
+            String updateFamilyChangeQuery = "update settings set PLACE_CHANGE=" + placeChange + " where ID=" + (Long) jsonObject.get("settingsId");
             ps = connection.prepareStatement(updateFamilyChangeQuery);
             ps.executeUpdate();
 
