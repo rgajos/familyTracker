@@ -105,7 +105,7 @@ public class GetLocalizations extends HttpServlet {
                 jsonSettings.put("placesChange", rs.getInt(3));
                 jsonSettings.put("gpsRefresh", rs.getInt(4));
                 jsonSettings.put("notifications", rs.getString(5));
-
+                jsonSettings.put("msgCounter", rs.getInt(7));
             }
 
             if ((Boolean) jsonObject.get("deletedNotification")) {

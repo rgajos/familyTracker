@@ -115,6 +115,7 @@ public class SyncLocalizations extends HttpServlet {
                 jsonSettings.put("placesChange", rs.getInt(3));
                 jsonSettings.put("gpsRefresh", rs.getInt(4));
                 jsonSettings.put("notifications", rs.getString(5));
+                jsonSettings.put("msgCounter", rs.getInt(7));
               
             }
             boolean deletedNotification = (Boolean) jsonObject.get("deletedNotification");
