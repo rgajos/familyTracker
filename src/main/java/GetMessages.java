@@ -6,6 +6,7 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,7 +51,9 @@ public class GetMessages extends HttpServlet {
         PreparedStatement ps = null;
         try {
             BufferedReader bufferedReader = request.getReader();
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(),request.getContentType()));
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(br);
 
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
