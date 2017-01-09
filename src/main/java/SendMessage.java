@@ -48,9 +48,7 @@ public class SendMessage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        request.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json ; charset=utf-8");
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
