@@ -7,7 +7,6 @@
 import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,21 +49,22 @@ public class SendMessage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
-        String cos="{\"message\": \"ńółś\",\"time\": \"2017-01-09 21:51:33.051\",\"messagesId\": 206,\"peopleId\": 101,\"settingsId\": 208 }";
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            
-            BufferedReader in = new BufferedReader(new InputStreamReader(request.getInputStream(), "UTF-8"));
-            String jsonw = in.readLine();
             BufferedReader bufferedReader = request.getReader();
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(jsonw);
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
+            
+                            JSONObject jsonz = new JSONObject();
+                jsonz.put("msg", jsonObject.get("message").toString());
+                jsonz.put("error", 0);
+                response.getWriter().write(jsonz.toString());
             
             JSONObject json = new JSONObject();
             
