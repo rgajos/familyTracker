@@ -6,10 +6,7 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -47,14 +44,13 @@ public class GetMessages extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json ; charset=utf-8");
+        response.setContentType("application/json");
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
         try {
-            InputStream inputStream = request.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream , StandardCharsets.UTF_8));
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(reader);
+            BufferedReader bufferedReader = request.getReader();
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
