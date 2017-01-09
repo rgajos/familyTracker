@@ -6,8 +6,6 @@
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -46,8 +44,8 @@ public class GetMessages extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType(request.getContentType());
-        PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF-8"), true);
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
         try {
