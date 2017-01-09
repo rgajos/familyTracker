@@ -48,7 +48,7 @@ public class SendMessage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html");
+        response.setContentType("text/html; charset=iso-8859-1");
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
