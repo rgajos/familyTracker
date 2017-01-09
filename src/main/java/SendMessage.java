@@ -8,6 +8,7 @@ import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -50,14 +51,12 @@ public class SendMessage extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType(request.getContentType());
-        PrintWriter out = response.getWriter();
+        PrintWriter out = new PrintWriter(new OutputStreamWriter(response.getOutputStream(), "UTF-8"), true);
         Connection connection = null;
         PreparedStatement ps = null;
         try {
             BufferedReader bufferedReader = request.getReader();
-
-            BufferedReader br = new BufferedReader(new InputStreamReader(request.getInputStream(),request.getContentType()));
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(br);
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
             
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
