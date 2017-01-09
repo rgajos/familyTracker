@@ -55,11 +55,6 @@ public class SendMessage extends HttpServlet {
         PreparedStatement ps = null;
         try {
             BufferedReader bufferedReader = request.getReader();
-            
-            String line ;
-            StringBuilder jb = new StringBuilder("");
-            while ((line = bufferedReader.readLine()) != null)
-            jb.append(new String(line.getBytes(), "UTF-8"));
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
             InitialContext ic = new InitialContext();
