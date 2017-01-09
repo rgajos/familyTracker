@@ -158,7 +158,7 @@ public class SyncLocalizations extends HttpServlet {
                 Notification notification = new Notification();
                 notification.setTime(jsonObject.get("notificationTime").toString());
                 notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setNotificationId((Long)jsonObject.get("notificationId"));
+                notification.setNotificationId((Long)jsonObject.get("notificationPeopleId"));
                 serverNotifications.add(notification);
                 
                 String actualNotifications = gson.toJson(serverNotifications);
