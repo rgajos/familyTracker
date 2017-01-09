@@ -54,6 +54,11 @@ public class SendMessage extends HttpServlet {
         PreparedStatement ps = null;
         try {
             BufferedReader bufferedReader = request.getReader();
+            
+            String line ;
+            StringBuilder jb = new StringBuilder("");
+            while ((line = bufferedReader.readLine()) != null)
+            jb.append(new String(line.getBytes(), "UTF-8"));
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
             InitialContext ic = new InitialContext();
@@ -62,7 +67,7 @@ public class SendMessage extends HttpServlet {
             connection = datasource.getConnection();
             
                             JSONObject jsonz = new JSONObject();
-                jsonz.put("msg", jsonObject.get("message").toString());
+                jsonz.put("msg", jb.toString());
                 jsonz.put("error", 0);
                 response.getWriter().write(jsonz.toString());
             
