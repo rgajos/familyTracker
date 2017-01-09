@@ -44,7 +44,7 @@ public class GetMessages extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("application/json; charset=UTF-8");
+        response.setContentType(request.getContentType());
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
