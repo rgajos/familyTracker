@@ -62,11 +62,6 @@ public class SendMessage extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
             
-                            JSONObject jsonz = new JSONObject();
-                jsonz.put("msg", jsonObject.get("message").toString());
-                jsonz.put("error", 0);
-                response.getWriter().write(jsonz.toString());
-            
             JSONObject json = new JSONObject();
             
             String getMessagesquery = "select MSG from messages where ID=" + (Long)jsonObject.get("messagesId");
