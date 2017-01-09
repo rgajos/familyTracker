@@ -50,6 +50,8 @@ public class SyncLocalizations extends HttpServlet {
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         response.setContentType("application/json");
+        response.setCharacterEncoding("UTF8");
+        request.setCharacterEncoding("UTF8");
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
