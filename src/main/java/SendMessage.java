@@ -63,7 +63,7 @@ public class SendMessage extends HttpServlet {
             connection = datasource.getConnection();
             
                             JSONObject jsonz = new JSONObject();
-                jsonz.put("msg", jb.toString());
+                jsonz.put("msg", jsonObject.get("message").toString());
                 jsonz.put("error", 0);
                 response.getWriter().write(jsonz.toString());
             
