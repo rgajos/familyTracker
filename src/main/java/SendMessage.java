@@ -48,13 +48,14 @@ public class SendMessage extends HttpServlet {
      */
     protected void processRequest(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        response.setContentType("text/html; charset=iso-8859-1");
+        response.setContentType("application/json");
+        String cos="{\"message\": \"ńółś\",\"time\": \"2017-01-09 21:51:33.051\",\"messagesId\": 206,\"peopleId\": 101,\"settingsId\": 208 }";
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
         try {
             BufferedReader bufferedReader = request.getReader();
-            JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
+            JSONObject jsonObject = (JSONObject) JSONValue.parse(cos);
 
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
