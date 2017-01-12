@@ -111,7 +111,7 @@ cnt++;
             int placeChange = 0;
 
             if (rs.next()) {
-                placeChange = rs.getInt(2);
+                placeChange = rs.getInt(3);
                 placeChange++;
             }
 

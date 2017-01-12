@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
@@ -70,6 +71,7 @@ public class SendMessage extends HttpServlet {
             
             if(rs.next()){
                 Gson gson = new Gson();
+
                 ArrayList serverMessages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(1), Message[].class)));
                 
                 if(serverMessages.size() > 19){
@@ -85,7 +87,7 @@ public class SendMessage extends HttpServlet {
                 ps = connection.prepareStatement(updateMessagesQuery);
                 ps.executeUpdate();
                 
-                json.put("error", 0);
+                json.put("error", jsonObject.get("message").toString());
                 
                 String getSettingsQuery = "select * from settings where ID=" + (Long)jsonObject.get("settingsId");
                 ps = connection.prepareStatement(getSettingsQuery);
