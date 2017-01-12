@@ -88,7 +88,7 @@ public class SendMessage extends HttpServlet {
                 ps = connection.prepareStatement(updateMessagesQuery);
                 ps.executeUpdate();
                 
-                json.put("error", jsonObject.get("message").toString());
+                
                 
                 String getSettingsQuery = "select * from settings where ID=" + (Long)jsonObject.get("settingsId");
                 ps = connection.prepareStatement(getSettingsQuery);
@@ -104,6 +104,7 @@ public class SendMessage extends HttpServlet {
                 ps = connection.prepareStatement(updateFamilyChangeQuery);
                 ps.executeUpdate();
                 
+                json.put("error", 0);
             }else{
                 json.put("error", 1);
                 json.put("desc", "Try Again");
