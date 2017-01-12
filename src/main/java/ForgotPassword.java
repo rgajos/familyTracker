@@ -12,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Random;
+import java.util.StringTokenizer;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -68,10 +69,17 @@ public class ForgotPassword extends HttpServlet {
             ResultSet rs = ps.executeQuery();
             if (rs.next()) {
                 
+                StringTokenizer st = new StringTokenizer(jsonObject.get("email").toString());
+
+                String email = "";
+
+                while (st.hasMoreElements()) {
+                    email += String.valueOf(Character.toChars(Integer.valueOf(st.nextToken())));
+                }
+                
                 SendEmail sendEmail = new SendEmail();
                 String result = sendEmail.sendMessage("trackerrgmobile@yahoo.com",
-                        jsonObject.get("email").toString(),
-
+                        email,
                         "Password reset request confirmation",
                         "We've received your request to reset your password, and would be glad to help. <br><br> In order for us to verify you are the account owner, please click the following link to reset your password. <br><br> <a href = \"http://familytracker-rgajos.rhcloud.com/ResetPassword?code=" + code +"\"> http://familytracker-rgajos.rhcloud.com/ResetPassword?code=" + code +" </a> <br><br> If clicking the link above doesn't work, please copy and paste the URL in a new browser window instead. <br><br> If you did not request your password to be reset (or you remembered your password), just ignore this messsage; no changes have been made to your account. <br><br> Sincerely, <br> The RG Mobile Team");
 
