@@ -58,6 +58,12 @@ public class SendMessage extends HttpServlet {
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
+            
+            JSONObject jsonw = new JSONObject();
+            jsonw.put("error", 2);
+            jsonw.put("desc", jsonObject.get("message").toString());
+            response.getWriter().write(jsonw.toString());
+            
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
