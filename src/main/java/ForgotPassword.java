@@ -86,6 +86,7 @@ public class ForgotPassword extends HttpServlet {
                 if(result.equals("ok")){
                     JSONObject json = new JSONObject();
                     json.put("error", 0);
+                    json.put("desc", email);
                     response.getWriter().write(json.toString());
                 }else{
                     JSONObject json = new JSONObject();
