@@ -59,10 +59,7 @@ public class SendMessage extends HttpServlet {
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
 
             
-            JSONObject jsonw = new JSONObject();
-            jsonw.put("error", 2);
-            jsonw.put("desc", jsonObject.get("message").toString());
-            response.getWriter().write(jsonw.toString());
+
             
             InitialContext ic = new InitialContext();
             Context initialContext = (Context) ic.lookup("java:comp/env");
@@ -85,6 +82,11 @@ public class SendMessage extends HttpServlet {
                 
                 Message message = new Message(jsonObject.get("message").toString(), (Long)jsonObject.get("peopleId"), jsonObject.get("time").toString());
                 serverMessages.add(message);
+                
+                JSONObject jsonw = new JSONObject();
+                jsonw.put("error", 2);
+                jsonw.put("desc", message.getMsg());
+                response.getWriter().write(jsonw.toString());
                 
                 String actualMessages = gson.toJson(serverMessages);
                 
