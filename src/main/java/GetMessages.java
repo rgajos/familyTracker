@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,16 +69,14 @@ public class GetMessages extends HttpServlet {
             ps = connection.prepareStatement(getMessagesQuery);
             ResultSet rs = ps.executeQuery();
             
+            Gson gson = new Gson();
             if (rs.next()) {
-                JSONParser parser = new JSONParser();
-                JSONObject json = null;
-                try {
-                    json = (JSONObject) parser.parse(rs.getString(2));
-                } catch (ParseException ex) {
-                    Logger.getLogger(GetMessages.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                
+                ArrayList messages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(2), Message[].class)));
+                String stringMessages = gson.toJson(messages);
 
-                json.put("msg", json.toJSONString());
+                JSONObject json = new JSONObject();
+                json.put("msg", stringMessages);
                 json.put("error", 0);
                 response.getWriter().write(json.toString());
             } else {
