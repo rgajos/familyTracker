@@ -67,17 +67,12 @@ public class GetMessages extends HttpServlet {
             String getMessagesQuery = "select * from messages where ID=" + (Long)jsonObject.get("messagesId");
             ps = connection.prepareStatement(getMessagesQuery);
             ResultSet rs = ps.executeQuery();
-
-            String msg = "";
-
-            Gson gson = new Gson();
             
             if (rs.next()) {
-                msg = rs.getString(2);
                 JSONParser parser = new JSONParser();
                 JSONObject json = null;
                 try {
-                    json = (JSONObject) parser.parse(rs.getString(5));
+                    json = (JSONObject) parser.parse(rs.getString(2));
                 } catch (ParseException ex) {
                     Logger.getLogger(GetMessages.class.getName()).log(Level.SEVERE, null, ex);
                 }
