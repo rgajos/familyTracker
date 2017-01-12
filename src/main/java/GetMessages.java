@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 
+import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,6 +14,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -25,6 +28,8 @@ import javax.sql.DataSource;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -65,10 +70,19 @@ public class GetMessages extends HttpServlet {
 
             String msg = "";
 
+            Gson gson = new Gson();
+            
             if (rs.next()) {
                 msg = rs.getString(2);
-                JSONObject json = new JSONObject();
-                json.put("msg", msg);
+                JSONParser parser = new JSONParser();
+                JSONObject json = null;
+                try {
+                    json = (JSONObject) parser.parse(rs.getString(5));
+                } catch (ParseException ex) {
+                    Logger.getLogger(GetMessages.class.getName()).log(Level.SEVERE, null, ex);
+                }
+
+                json.put("msg", json.toJSONString());
                 json.put("error", 0);
                 response.getWriter().write(json.toString());
             } else {
