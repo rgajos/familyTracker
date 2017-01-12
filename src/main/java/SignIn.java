@@ -87,6 +87,7 @@ public class SignIn extends HttpServlet {
                         jsonSettings.put("gpsRefresh", rs.getInt(4));
                         jsonSettings.put("notifications", rs.getString(5));
                         jsonSettings.put("userId", rs.getLong(6));
+                        jsonSettings.put("msgCounter", rs.getInt(7));
                     }
                     
                     String getMessagesQuery = "select * from messages where USER_ID='" + userId + "'";
