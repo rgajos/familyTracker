@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 
-import com.google.gson.Gson;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -13,10 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Random;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
@@ -29,8 +25,6 @@ import javax.sql.DataSource;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
  *
@@ -68,15 +62,13 @@ public class GetMessages extends HttpServlet {
             String getMessagesQuery = "select * from messages where ID=" + (Long)jsonObject.get("messagesId");
             ps = connection.prepareStatement(getMessagesQuery);
             ResultSet rs = ps.executeQuery();
-            
-            Gson gson = new Gson();
-            if (rs.next()) {
-                
-                ArrayList messages = new ArrayList<Message>(Arrays.asList(gson.fromJson(rs.getString(2), Message[].class)));
-                String stringMessages = gson.toJson(messages);
 
+            String msg = "";
+
+            if (rs.next()) {
+                msg = rs.getString(2);
                 JSONObject json = new JSONObject();
-                json.put("msg", stringMessages);
+                json.put("msg", msg);
                 json.put("error", 0);
                 response.getWriter().write(json.toString());
             } else {
