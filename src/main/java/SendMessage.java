@@ -83,12 +83,14 @@ public class SendMessage extends HttpServlet {
                 Message message = new Message(jsonObject.get("message").toString(), (Long)jsonObject.get("peopleId"), jsonObject.get("time").toString());
                 serverMessages.add(message);
                 
-                JSONObject jsonw = new JSONObject();
-                jsonw.put("error", 2);
-                jsonw.put("desc", message.getMsg());
-                response.getWriter().write(jsonw.toString());
+
                 
                 String actualMessages = gson.toJson(serverMessages);
+                
+                JSONObject jsonw = new JSONObject();
+                jsonw.put("error", 2);
+                jsonw.put("desc", actualMessages);
+                response.getWriter().write(jsonw.toString());
                 
                 String updateMessagesQuery = "update messages set MSG='" + actualMessages + "' where ID=" + (Long)jsonObject.get("messagesId");
                 ps = connection.prepareStatement(updateMessagesQuery);
