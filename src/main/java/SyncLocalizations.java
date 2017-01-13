@@ -157,11 +157,8 @@ public class SyncLocalizations extends HttpServlet {
                 
                 Gson gson = new Gson();
                 ArrayList serverNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(rs.getString(5), Notification[].class)));
-                Notification notification = new Notification();
-                notification.setTime(jsonObject.get("notificationTime").toString());
-                notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setNotificationId((Long)jsonObject.get("notificationPeopleId"));
-                serverNotifications.add(notification);
+                ArrayList newNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(jsonObject.get("newNotifications").toString(), Notification[].class)));
+                serverNotifications.addAll(newNotifications);
                 
                 String actualNotifications = gson.toJson(serverNotifications);
                 jsonSettings.put("notifications", actualNotifications);
@@ -198,13 +195,8 @@ public class SyncLocalizations extends HttpServlet {
                     }            cnt++;
                 }
                 sb.append("bedzei robil notification");
-                Notification notification = new Notification();
-                notification.setTime(jsonObject.get("notificationTime").toString());
-                notification.setMsg(jsonObject.get("notificationMsg").toString());
-                notification.setNotificationId((Long) jsonObject.get("notificationPeopleId"));
-                sb.append("zrobil notification");
-                cnt++;
-                serverNotifications.add(notification);
+                ArrayList newNotifications = new ArrayList<Notification>(Arrays.asList(gson.fromJson(jsonObject.get("newNotifications").toString(), Notification[].class)));
+                serverNotifications.addAll(newNotifications);
                 cnt++;
                 String actualNotifications = gson.toJson(serverNotifications);
                 cnt++;

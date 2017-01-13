@@ -12,23 +12,17 @@ public class Notification {
 
     private String time;
     private String msg;
-    private long notificationId;
+    private long notificationPeopleId;
+    private int notificationType;
 
     public Notification() {
     }
 
-    public Notification(String time, String msg, long notificationId) {
-        this.time = time;
+    public Notification(String msg, long notificationId, String time, int notificationType) {
         this.msg = msg;
-        this.notificationId = notificationId;
-    }
-
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
+        this.notificationPeopleId = notificationId;
         this.time = time;
+        this.notificationType = notificationType;
     }
 
     public String getMsg() {
@@ -39,13 +33,37 @@ public class Notification {
         this.msg = msg;
     }
 
-    public long getNotificationId() {
-        return notificationId;
+    public String getTime() {
+        return time;
     }
 
-    public void setNotificationId(long notificationId) {
-        this.notificationId = notificationId;
+    public void setTime(String time) {
+        this.time = time;
     }
-    
-    
+
+    public long getNotificationPeopleId() {
+        return notificationPeopleId;
+    }
+
+    public void setNotificationPeopleId(long notificationPeopleId) {
+        this.notificationPeopleId = notificationPeopleId;
+    }
+
+    public int getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(int notificationType) {
+        this.notificationType = notificationType;
+    }
+
+    @Override
+    public String toString() {
+        return "Notification{"
+                + "msg='" + msg + '\''
+                + ", time='" + time + '\''
+                + ", notificationId=" + notificationPeopleId
+                + ", notificationType=" + notificationType
+                + '}';
+    }
 }
