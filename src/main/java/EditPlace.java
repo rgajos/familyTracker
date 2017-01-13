@@ -116,6 +116,7 @@ public class EditPlace extends HttpServlet {
             cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
+            json.put("place2peoples", place2peopleJSONArray);
             response.getWriter().write(json.toString());
 
         } catch (IOException ex) {
