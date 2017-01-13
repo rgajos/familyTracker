@@ -61,6 +61,7 @@ public class CheckForUpdate extends HttpServlet {
                 JSONObject json = new JSONObject();
                 json.put("error", 0);
                 json.put("version", rs.getInt(2));
+                json.put("address", rs.getString(3));
                 response.getWriter().write(json.toString());
             }
 
