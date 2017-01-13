@@ -74,15 +74,28 @@ public class EditPlace extends HttpServlet {
             ps = connection.prepareStatement(deletePlace2PeopleQuery);
             ps.executeUpdate();
             
+            JSONArray place2peopleJSONArray = new JSONArray();
             for (int i = 0; i < jsonArray.size(); i++) {
                 String insertPeople2PlaceQuery = "insert into place2people (places_id, people_id, user_id) values (?,?,?)";
-                ps = connection.prepareStatement(insertPeople2PlaceQuery);
+                ps = connection.prepareStatement(insertPeople2PlaceQuery, Statement.RETURN_GENERATED_KEYS);
 
                 ps.setLong(1, (Long) jsonObject.get("placeId"));
                 ps.setLong(2, Long.valueOf(jsonArray.get(i).toString()));
                 ps.setLong(3, (Long) jsonObject.get("userId"));
 
                 ps.executeUpdate();
+
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+                long places2peopleId = 0;
+                if (generatedKeys.next()) {
+                    places2peopleId = generatedKeys.getInt(1);
+                }
+                JSONObject place2people = new JSONObject();
+                place2people.put("id", places2peopleId);
+                place2people.put("placeId", (Long) jsonObject.get("placeId"));
+                place2people.put("peopleId", Long.valueOf(jsonArray.get(i).toString()));
+
+                place2peopleJSONArray.add(place2people);
             }
 
             String getSettingsQuery = "select * from settings where ID=" + (Long) jsonObject.get("settingsId");
