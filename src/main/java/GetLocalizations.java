@@ -124,6 +124,7 @@ public class GetLocalizations extends HttpServlet {
                         for (Notification notification : notifications) {
                             if (notification.getTime().equals(serverNotification.getTime())) {
                                 iterator.remove();
+                                break;
                             }
                         }
                     }

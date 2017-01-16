@@ -139,6 +139,7 @@ public class SyncLocalizations extends HttpServlet {
                         for (Notification notification : notifications) {
                             if (notification.getTime().equals(serverNotification.getTime())) {
                                 iterator.remove();
+                                break;
                             }
                         }
                     }
@@ -193,6 +194,7 @@ cnt++;
                             if (notification.getTime().equals(serverNotification.getTime())) {
                                 sb.append("remowoje ");
                                 iterator.remove();
+                                break;
                             }
                         }
                     }            cnt++;
