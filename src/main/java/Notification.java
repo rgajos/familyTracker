@@ -14,15 +14,17 @@ public class Notification {
     private String msg;
     private long notificationPeopleId;
     private int notificationType;
+    private double speed;
 
     public Notification() {
     }
 
-    public Notification(String msg, long notificationId, String time, int notificationType) {
+    public Notification(String msg, long notificationPeopleId, String time, int notificationType, double speed) {
         this.msg = msg;
-        this.notificationPeopleId = notificationId;
+        this.notificationPeopleId = notificationPeopleId;
         this.time = time;
         this.notificationType = notificationType;
+        this.speed = speed;
     }
 
     public String getMsg() {
@@ -57,13 +59,22 @@ public class Notification {
         this.notificationType = notificationType;
     }
 
+    public double getSpeed() {
+        return speed;
+    }
+
+    public void setSpeed(double speed) {
+        this.speed = speed;
+    }
+
     @Override
     public String toString() {
-        return "Notification{"
-                + "msg='" + msg + '\''
-                + ", time='" + time + '\''
-                + ", notificationId=" + notificationPeopleId
-                + ", notificationType=" + notificationType
-                + '}';
+        return "Notification{" +
+                "msg='" + msg + '\'' +
+                ", time='" + time + '\'' +
+                ", notificationPeopleId=" + notificationPeopleId +
+                ", notificationType=" + notificationType +
+                ", speed=" + speed +
+                '}';
     }
 }
