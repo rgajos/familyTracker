@@ -71,16 +71,18 @@ public class SyncLocalizations extends HttpServlet {
             JSONObject json = new JSONObject();
             cnt++;
             cnt++;
-            String updateLocalizationQuery = "update localizations set "
-                    + "LONGITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("longitude"))+ "',"
-                    + "LATITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("latitude")) + "',"
-                    + "TIME='" + jsonObject.get("time").toString() + "',"
-                    + "BATTERY='" + (Long)jsonObject.get("battery") + "',"
-                    + "ACCURACY='" + BigDecimal.valueOf((Double)jsonObject.get("accuracy")) + "'"
-                    + " where ID='" + (Long)jsonObject.get("localizationId") + "'";
-            ps = connection.prepareStatement(updateLocalizationQuery);
-            ps.executeUpdate();
-            cnt++;
+            if((Boolean)jsonObject.get("newLocation")){
+                String updateLocalizationQuery = "update localizations set "
+                        + "LONGITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("longitude"))+ "',"
+                        + "LATITUDE='" + BigDecimal.valueOf((Double)jsonObject.get("latitude")) + "',"
+                        + "TIME='" + jsonObject.get("time").toString() + "',"
+                        + "BATTERY='" + (Long)jsonObject.get("battery") + "',"
+                        + "ACCURACY='" + BigDecimal.valueOf((Double)jsonObject.get("accuracy")) + "'"
+                        + " where ID='" + (Long)jsonObject.get("localizationId") + "'";
+                ps = connection.prepareStatement(updateLocalizationQuery);
+                ps.executeUpdate();
+                cnt++;
+            }
             cnt++;
                 cnt++;
             if(jsonObject.get("peoplesLocalizationId").toString().length() > 0){
