@@ -51,7 +51,6 @@ public class EditPlace extends HttpServlet {
         Connection connection = null;
         PreparedStatement ps = null;
 
-        int cnt = 0;
         try {
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
@@ -60,16 +59,13 @@ public class EditPlace extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            cnt++;
+
             String replacePlaceQuery = "update places set name='" + jsonObject.get("name").toString() +"' , radius=" +(Long) jsonObject.get("radius") +" , longitude="+ (Double) jsonObject.get("longitude")+ " , latitude="+ (Double) jsonObject.get("latitude") +" where ID=" + (Long) jsonObject.get("placeId");
             ps = connection.prepareStatement(replacePlaceQuery);
             ps.executeUpdate();
-            cnt++;
 
-            cnt++;
             JSONArray jsonArray = (JSONArray) jsonObject.get("peopleIds");
-            cnt++;
-            
+
             String deletePlace2PeopleQuery = "delete from place2people where PLACES_ID=" + (Long) jsonObject.get("placeId");
             ps = connection.prepareStatement(deletePlace2PeopleQuery);
             ps.executeUpdate();
@@ -113,7 +109,6 @@ public class EditPlace extends HttpServlet {
             ps = connection.prepareStatement(updateFamilyChangeQuery);
             ps.executeUpdate();
 
-            cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
             json.put("place2peoples", place2peopleJSONArray);
@@ -137,7 +132,7 @@ public class EditPlace extends HttpServlet {
         } catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage() + cnt);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } finally {
             try {

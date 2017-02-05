@@ -64,7 +64,6 @@ public class DeletePeople extends HttpServlet {
             ps = connection.prepareStatement(deleteLocalizationQuery);
             ps.executeUpdate();
             
-            
             if (jsonObject.get("place2PeopleIds").toString().length() > 0){
                 String deletePlace2PeopleQuery = "delete from place2people where ID in (" + jsonObject.get("place2PeopleIds").toString() + ")";
                 ps = connection.prepareStatement(deletePlace2PeopleQuery);
@@ -82,7 +81,6 @@ public class DeletePeople extends HttpServlet {
                 familyChange++;
             }
             
-
             String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE=" + familyChange + " where ID=" + (Long) jsonObject.get("settingsId");
             ps = connection.prepareStatement(updateFamilyChangeQuery);
             ps.executeUpdate();

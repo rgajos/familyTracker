@@ -50,8 +50,7 @@ public class AddPlace extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
-        
-        int cnt = 0;
+
         try {
             BufferedReader bufferedReader = request.getReader();
             JSONObject jsonObject = (JSONObject) JSONValue.parse(bufferedReader);
@@ -60,25 +59,24 @@ public class AddPlace extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-cnt++;
+
             String insertPlaceQuery = "insert into places (name, radius, longitude, latitude, user_id) values (?,?,?,?,?)";
             ps = connection.prepareStatement(insertPlaceQuery, Statement.RETURN_GENERATED_KEYS);
-            cnt++;
+
             ps.setString(1, jsonObject.get("name").toString());
             ps.setLong(2, (Long) jsonObject.get("radius"));
             ps.setDouble(3, (Double) jsonObject.get("longitude"));
             ps.setDouble(4, (Double) jsonObject.get("latitude"));
             ps.setLong(5, (Long) jsonObject.get("userId"));
-            cnt++;
+
             ps.executeUpdate();
-            cnt++;
+
             ResultSet generatedKeys = ps.getGeneratedKeys();
             long placesId = 0;
             if (generatedKeys.next()) {
                 placesId = generatedKeys.getInt(1);
-            }cnt++;
+            }
             JSONArray jsonArray = (JSONArray)jsonObject.get("peopleIds");
-            cnt++;
             
             JSONArray place2peopleJSONArray = new JSONArray();
             for (int i = 0; i < jsonArray.size(); i++) {
@@ -119,7 +117,6 @@ cnt++;
             ps = connection.prepareStatement(updateFamilyChangeQuery);
             ps.executeUpdate();
             
-            cnt++;
             JSONObject json = new JSONObject();
             json.put("error", 0);
             json.put("placeId", placesId);
@@ -145,7 +142,7 @@ cnt++;
         }catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage()+cnt);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } finally {
             try {

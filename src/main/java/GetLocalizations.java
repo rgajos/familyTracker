@@ -53,8 +53,7 @@ public class GetLocalizations extends HttpServlet {
         PrintWriter out = response.getWriter();
         Connection connection = null;
         PreparedStatement ps = null;
-        int cnt = 0;
-        StringBuilder sb = new StringBuilder();
+
         try {
 
             BufferedReader bufferedReader = request.getReader();
@@ -67,10 +66,7 @@ public class GetLocalizations extends HttpServlet {
             ResultSet rs;
 
             JSONObject json = new JSONObject();
-            cnt++;
 
-            cnt++;
-                cnt++;
             if (jsonObject.get("peoplesLocalizationId").toString().length() > 0) {
                 JSONArray localizationJSONArray = new JSONArray();
 
@@ -86,7 +82,7 @@ public class GetLocalizations extends HttpServlet {
                     localization.put("battery", rs.getInt(5));
                     localization.put("accuracy", rs.getFloat(6));
                     localization.put("peopleId", rs.getLong(7));
-                    cnt++;
+
                     localizationJSONArray.add(localization);
 
                 }
@@ -99,7 +95,6 @@ public class GetLocalizations extends HttpServlet {
             ps = connection.prepareStatement(getSettingsQuery);
             rs = ps.executeQuery();
 
-            cnt++;
             if (rs.next()) {
                 jsonSettings.put("familyChange", rs.getInt(2));
                 jsonSettings.put("placesChange", rs.getInt(3));
@@ -139,33 +134,29 @@ public class GetLocalizations extends HttpServlet {
                 }
             }
 
-            cnt++;
-            sb.append("jsettings: " + jsonSettings.toString());
             json.put("settings", jsonSettings);
-            cnt++;
             json.put("error", 0);
-            cnt++;
             response.getWriter().write(json.toString());
-            cnt++;
+
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage() + cnt);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } catch (NamingException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage() + cnt);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } catch (SQLException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage() + cnt);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } catch (Exception ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
-            json.put("desc", ex.getMessage() + cnt + sb);
+            json.put("desc", ex.getMessage());
             response.getWriter().write(json.toString());
         } finally {
             try {
