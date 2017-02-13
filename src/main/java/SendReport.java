@@ -56,10 +56,6 @@ public class SendReport extends HttpServlet {
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
 
-            String getSettingsQuery = "select * from settings where ID=" + (Long) jsonObject.get("settingsId");
-            ps = connection.prepareStatement(getSettingsQuery);
-            ResultSet rs = ps.executeQuery();
-
             String insertReportQuery = "insert into report (report) values (?)";
             ps = connection.prepareStatement(insertReportQuery);
             ps.setString(1, jsonObject.get("report").toString());
