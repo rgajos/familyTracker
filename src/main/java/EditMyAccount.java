@@ -75,7 +75,7 @@ public class EditMyAccount extends HttpServlet {
                     ps.executeUpdate();
                 }
             }else{
-                String updateUserQuery = "update user set name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() +  "' where ID=" + (Long) jsonObject.get("userId");
+                String updateUserQuery = "update user set email='"+ jsonObject.get("email").toString() + "' , name='" + jsonObject.get("name").toString() + "' , password='" + jsonObject.get("password").toString() +  "' where ID=" + (Long) jsonObject.get("userId");
                 ps = connection.prepareStatement(updateUserQuery);
                 ps.executeUpdate();
                 
