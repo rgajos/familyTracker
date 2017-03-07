@@ -83,8 +83,6 @@ public class AddPeople extends HttpServlet {
                 json.put("desc", "ERROR ! TRY AGAIN ...");
             }
             
-
-            
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
             json.put("error", 2);
