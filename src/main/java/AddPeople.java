@@ -57,7 +57,7 @@ public class AddPeople extends HttpServlet {
             connection = datasource.getConnection();
             
             String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id) values (?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery);
+            ps = connection.prepareStatement(insertAddPeopleQuery, Statement.RETURN_GENERATED_KEYS);
             
             ps.setLong(1, (Long)jsonObject.get("code"));
             ps.setLong(2, (Long)jsonObject.get("context"));
@@ -65,9 +65,25 @@ public class AddPeople extends HttpServlet {
             ps.setLong(4, (Long) jsonObject.get("messagesId"));
             ps.executeUpdate();
 
-            JSONObject json = new JSONObject();
-            json.put("error", 0);
-            response.getWriter().write(json.toString());
+            ResultSet generatedKeys = ps.getGeneratedKeys();
+
+            if (generatedKeys.next()) {
+                if(generatedKeys.getInt(1) > 0){
+                    JSONObject json = new JSONObject();
+                    json.put("error", 0);
+                    response.getWriter().write(json.toString());
+                }else{
+                    JSONObject json = new JSONObject();
+                    json.put("error", 2);
+                    json.put("desc", "ERROR ! TRY AGAIN ...");
+                }
+            }else{
+                JSONObject json = new JSONObject();
+                json.put("error", 2);
+                json.put("desc", "ERROR ! TRY AGAIN ...");
+            }
+            
+
             
         } catch (IOException ex) {
             JSONObject json = new JSONObject();
