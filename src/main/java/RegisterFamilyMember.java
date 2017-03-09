@@ -98,6 +98,7 @@ public class RegisterFamilyMember extends HttpServlet {
                     jsonSettings.put("notifications", rs.getString(5));
                     jsonSettings.put("userId", userId);
                     jsonSettings.put("msgCounter", rs.getInt(7));
+                    jsonSettings.put("premium", rs.getInt(8));
                 }
 
                 String updateFamilyChangeQuery = "update settings set FAMILY_CHANGE='"+familyChange+"' where ID='"+rs.getLong(1)+"'";

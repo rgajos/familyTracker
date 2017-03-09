@@ -151,7 +151,6 @@ public class Register extends HttpServlet {
                     json.put("localizationId", localizationId);
                     json.put("settingsId", settingsId);
                     json.put("messagesId", messagesId);
-
                     response.getWriter().write(json.toString());
                 }
 
