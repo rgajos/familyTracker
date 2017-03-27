@@ -71,14 +71,16 @@ public class SunCloudGetVersion extends HttpServlet {
                 JSONObject json = new JSONObject();
                 json.put("error", 0);
                 json.put("version", rs.getInt(2));
+                json.put("date", rs.getString(4));
                 
                 response.getWriter().write(json.toString());
             } else {
                
-                String insertDeviceQuery = "insert into sun_cloud_device_version (VERSION, DEVICE_ID) values (?,?)";
+                String insertDeviceQuery = "insert into sun_cloud_device_version (VERSION, DEVICE_ID, DATE) values (?,?,?)";
                 ps = connection.prepareStatement(insertDeviceQuery, Statement.RETURN_GENERATED_KEYS);
                 ps.setInt(1, 0);
                 ps.setString(2, jsonObject.get("deviceId").toString());
+                ps.setString(3, jsonObject.get("date").toString());
                 ps.executeUpdate();
                 
                 JSONObject json = new JSONObject();
