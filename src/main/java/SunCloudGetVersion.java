@@ -68,10 +68,6 @@ public class SunCloudGetVersion extends HttpServlet {
 
             if (rs.next()) {
                 
-                String getVersionQuery = "select * from sun_cloud_device_version where DEVICE_ID='" + jsonObject.get("deviceId").toString() + "'";
-                ps = connection.prepareStatement(getVersionQuery);
-                rs = ps.executeQuery();  
-                
                 JSONObject json = new JSONObject();
                 json.put("error", 0);
                 json.put("version", rs.getInt(2));
