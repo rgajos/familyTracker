@@ -100,7 +100,7 @@ public class RegisterFamilyMember extends HttpServlet {
 
                 while (rs.next()) {
                     String updateAddPeopleQuery = "update add_people set "
-                            + "PEOPLE_IDS='" + lastPeopleIds + "' where SETTINGS_ID=" + (Long) jsonObject.get("settingsId") + "";
+                            + "PEOPLE_IDS='" + lastPeopleIds + "' where SETTINGS_ID=" + rs.getInt(4) + "";
                     ps = connection.prepareStatement(updateAddPeopleQuery);
                     ps.executeUpdate();
                 }
