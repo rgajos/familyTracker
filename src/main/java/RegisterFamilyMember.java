@@ -70,11 +70,13 @@ public class RegisterFamilyMember extends HttpServlet {
             long peopleId = 0L;
             long messagesId = 0L;
             int familyChange = 0;
+            String peopleIds = "";
 
             if (rs.next()) {
                 context = rs.getInt(3);
                 messagesId = rs.getInt(5);
-
+                peopleIds = rs.getString(6);
+                        
                 JSONObject json = new JSONObject();
                 JSONObject jsonSettings = new JSONObject();
                 JSONObject jsonMessages = new JSONObject();
@@ -172,7 +174,8 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps = connection.prepareStatement(updateLocalizationQuery);
                 ps.executeUpdate();
 
-                String getPeopleQuery = "select * from people where USER_ID=" + userId + "";
+                String getPeopleQuery = "select * from people where ID in (" + peopleIds + ")";
+
                 ps = connection.prepareStatement(getPeopleQuery);
                 rs = ps.executeQuery();
 
