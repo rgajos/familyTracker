@@ -70,13 +70,15 @@ public class RegisterFamilyMember extends HttpServlet {
             long peopleId = 0L;
             long messagesId = 0L;
             int familyChange = 0;
+            long settingsId = 0L;
             String peopleIds = "";
 
             if (rs.next()) {
                 context = rs.getInt(3);
-                messagesId = rs.getInt(5);
+                messagesId = rs.getLong(5);
                 peopleIds = rs.getString(6);
-                        
+                settingsId = rs.getLong(4);
+                
                 JSONObject json = new JSONObject();
                 JSONObject jsonSettings = new JSONObject();
                 JSONObject jsonMessages = new JSONObject();
@@ -169,7 +171,7 @@ public class RegisterFamilyMember extends HttpServlet {
                     peopleId = generatedKeys.getInt(1);
                 }
                 
-                String getLastAddpeopleQuery = "select * from add_people where settings_id='" + rs.getInt(4) + "' order by Id desc";
+                String getLastAddpeopleQuery = "select * from add_people where settings_id='" + settingsId + "' order by Id desc";
                 ps = connection.prepareStatement(getLastAddpeopleQuery);
                 rs = ps.executeQuery();
 
@@ -180,13 +182,13 @@ public class RegisterFamilyMember extends HttpServlet {
                 }
                 lastPeopleIds = lastPeopleIds +","+peopleId;
                         
-                String getAddpeopleQuery = "select * from add_people where settings_id='" + rs.getInt(4) + "'";
+                String getAddpeopleQuery = "select * from add_people where settings_id='" + settingsId + "'";
                 ps = connection.prepareStatement(getAddpeopleQuery);
                 rs = ps.executeQuery();
 
                 while (rs.next()) {
                     String updateAddPeopleQuery = "update add_people set "
-                            + "PEOPLE_IDS='" + lastPeopleIds + "' where SETTINGS_ID=" + rs.getInt(4) + "";
+                            + "PEOPLE_IDS='" + lastPeopleIds + "' where SETTINGS_ID=" + settingsId + "";
                     ps = connection.prepareStatement(updateAddPeopleQuery);
                     ps.executeUpdate();
                 }
@@ -196,7 +198,7 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps = connection.prepareStatement(updateLocalizationQuery);
                 ps.executeUpdate();
 
-                String getPeopleQuery = "select * from people where ID in (" + peopleIds + ","+peopleId+")";
+                String getPeopleQuery = "select * from people where ID in (" +lastPeopleIds+")";
 
                 ps = connection.prepareStatement(getPeopleQuery);
                 rs = ps.executeQuery();
