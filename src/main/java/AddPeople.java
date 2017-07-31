@@ -63,7 +63,7 @@ public class AddPeople extends HttpServlet {
             ps.setLong(2, (Long)jsonObject.get("context"));
             ps.setLong(3, (Long) jsonObject.get("settingsId"));
             ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.setString(5, (String) jsonObject.get("people_ids"));
+            ps.setString(5, (String) jsonObject.get("peopleIds"));
             ps.executeUpdate();
 
             ResultSet generatedKeys = ps.getGeneratedKeys();

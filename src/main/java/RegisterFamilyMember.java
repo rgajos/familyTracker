@@ -174,7 +174,7 @@ public class RegisterFamilyMember extends HttpServlet {
                 ps = connection.prepareStatement(updateLocalizationQuery);
                 ps.executeUpdate();
 
-                String getPeopleQuery = "select * from people where ID in (" + peopleIds + ")";
+                String getPeopleQuery = "select * from people where ID in (" + peopleIds + ","+peopleId+")";
 
                 ps = connection.prepareStatement(getPeopleQuery);
                 rs = ps.executeQuery();
