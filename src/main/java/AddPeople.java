@@ -55,18 +55,7 @@ public class AddPeople extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            
-            String getAddpeopleQuery = "select * from add_people where settings_id='" + (Long) jsonObject.get("settingsId") + "'";
-            ps = connection.prepareStatement(getAddpeopleQuery);
-            ResultSet rs = ps.executeQuery();
-            
-            
-            while(rs.next()){
-                String updateAddPeopleQuery = "update add_people set "
-                        + "PEOPLE_IDS='" + (String) jsonObject.get("peopleIds") + "' where SETTINGS_ID=" + (Long) jsonObject.get("settingsId") + "";
-                ps = connection.prepareStatement(updateAddPeopleQuery);
-                ps.executeUpdate();
-            }
+
             
             String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id, people_ids) values (?,?,?,?,?)";
             ps = connection.prepareStatement(insertAddPeopleQuery, Statement.RETURN_GENERATED_KEYS);

@@ -84,6 +84,27 @@ public class RegisterFamilyMember extends HttpServlet {
                 JSONArray jSONArrayPlaces = new JSONArray();
                 JSONArray jSONArrayPlace2People = new JSONArray();
 
+                String getLastAddpeopleQuery = "select * from add_people where settings_id='" + rs.getInt(4) + "' order by Id desc";
+                ps = connection.prepareStatement(getLastAddpeopleQuery);
+                rs = ps.executeQuery();
+                
+                String lastPeopleIds = "";
+                
+                if(rs.next()){
+                    lastPeopleIds = rs.getString(6);
+                }
+                
+                String getAddpeopleQuery = "select * from add_people where settings_id='" + rs.getInt(4) + "'";
+                ps = connection.prepareStatement(getAddpeopleQuery);
+                rs = ps.executeQuery();
+
+                while (rs.next()) {
+                    String updateAddPeopleQuery = "update add_people set "
+                            + "PEOPLE_IDS='" + lastPeopleIds + "' where SETTINGS_ID=" + (Long) jsonObject.get("settingsId") + "";
+                    ps = connection.prepareStatement(updateAddPeopleQuery);
+                    ps.executeUpdate();
+                }
+                
                 String getSettingsQuery = "select * from settings where ID='" + rs.getInt(4) + "'";
                 ps = connection.prepareStatement(getSettingsQuery);
                 rs = ps.executeQuery();
