@@ -195,12 +195,6 @@ public class RegisterFamilyMember extends HttpServlet {
                 }
 
                 json.put("peoples", jSONArrayPeoples);
-
-                String updateUserQuery = "update user set "
-                        + "PEOPLE_IDS='" + peopleIds + "," + peopleId + "' where ID=" + userId + "";
-                
-                ps = connection.prepareStatement(updateUserQuery);
-                ps.executeUpdate();
                 
                 String deleteAddPeopleQuery = "delete from add_people where code=" + jsonObject.get("code").toString();
                 ps = connection.prepareStatement(deleteAddPeopleQuery);

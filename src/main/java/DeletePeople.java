@@ -60,27 +60,6 @@ public class DeletePeople extends HttpServlet {
             ps = connection.prepareStatement(deletePeopleQuery);
             ps.executeUpdate();
             
-            String peopleIds = "";
-            
-            String getUserQuery = "select * from user where ID="+ (Long) jsonObject.get("userId");
-
-            ps = connection.prepareStatement(getUserQuery);
-            ResultSet rs = ps.executeQuery();
-            
-            if (rs.next()) {
-                peopleIds = rs.getString(6);
-            }
-            
-            if(peopleIds.contains(String.valueOf((Long) jsonObject.get("peopleId")))){
-                peopleIds.replace(String.valueOf((Long) jsonObject.get("peopleId"))+",", "");
-            }
-            
-            String updateUserQuery = "update user set "
-                    + "PEOPLE_IDS='" + peopleIds + "' where ID=" + (Long) jsonObject.get("userId") + "";
-
-            ps = connection.prepareStatement(updateUserQuery);
-            ps.executeUpdate();
-            
             String deleteLocalizationQuery = "delete from localizations where ID=" + (Long) jsonObject.get("localizationId");
             ps = connection.prepareStatement(deleteLocalizationQuery);
             ps.executeUpdate();
@@ -93,7 +72,7 @@ public class DeletePeople extends HttpServlet {
             
             String getSettingsQuery = "select * from settings where ID=" + (Long) jsonObject.get("settingsId");
             ps = connection.prepareStatement(getSettingsQuery);
-            rs = ps.executeQuery();
+            ResultSet rs = ps.executeQuery();
             
             int familyChange = 0;
             
