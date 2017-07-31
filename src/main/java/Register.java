@@ -123,6 +123,11 @@ public class Register extends HttpServlet {
                         peopleId = generatedKeys.getInt(1);
                     }
                     
+                    String updateUserQuery = "update user set "
+                            + "PEOPLE_IDS='" + peopleId + "' where ID=" + userId;
+                    ps = connection.prepareStatement(updateUserQuery);
+                    ps.executeUpdate();
+                    
                     String updateLocalizationQuery = "update localizations set "
                             + "PEOPLE_ID='" + peopleId + "' where ID=" + localizationId;
                     ps = connection.prepareStatement(updateLocalizationQuery);
