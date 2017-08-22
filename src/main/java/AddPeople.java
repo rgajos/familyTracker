@@ -57,32 +57,45 @@ public class AddPeople extends HttpServlet {
             connection = datasource.getConnection();
 
             
-            String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id, people_ids) values (?,?,?,?,?)";
-            ps = connection.prepareStatement(insertAddPeopleQuery, Statement.RETURN_GENERATED_KEYS);
+            String checkAddPeopleQuery = "select * from add_people where code='" + jsonObject.get("code").toString() + "'";
+            ps = connection.prepareStatement(checkAddPeopleQuery);
+            ResultSet rs = ps.executeQuery();
             
-            ps.setLong(1, (Long)jsonObject.get("code"));
-            ps.setLong(2, (Long)jsonObject.get("context"));
-            ps.setLong(3, (Long) jsonObject.get("settingsId"));
-            ps.setLong(4, (Long) jsonObject.get("messagesId"));
-            ps.setString(5, (String) jsonObject.get("peopleIds"));
-            ps.executeUpdate();
+            if(rs.next()){
+                JSONObject json = new JSONObject();
+                json.put("error", 3);
+                json.put("desc", "CODE EXIST");
+                response.getWriter().write(json.toString());
+            }else{
+                String insertAddPeopleQuery = "insert into add_people (code, context, settings_id, messages_Id, people_ids) values (?,?,?,?,?)";
+                ps = connection.prepareStatement(insertAddPeopleQuery, Statement.RETURN_GENERATED_KEYS);
 
-            ResultSet generatedKeys = ps.getGeneratedKeys();
+                ps.setLong(1, (Long) jsonObject.get("code"));
+                ps.setLong(2, (Long) jsonObject.get("context"));
+                ps.setLong(3, (Long) jsonObject.get("settingsId"));
+                ps.setLong(4, (Long) jsonObject.get("messagesId"));
+                ps.setString(5, (String) jsonObject.get("peopleIds"));
+                ps.executeUpdate();
 
-            if (generatedKeys.next()) {
-                if(generatedKeys.getInt(1) > 0){
-                    JSONObject json = new JSONObject();
-                    json.put("error", 0);
-                    response.getWriter().write(json.toString());
-                }else{
+                ResultSet generatedKeys = ps.getGeneratedKeys();
+
+                if (generatedKeys.next()) {
+                    if (generatedKeys.getInt(1) > 0) {
+                        JSONObject json = new JSONObject();
+                        json.put("error", 0);
+                        response.getWriter().write(json.toString());
+                    } else {
+                        JSONObject json = new JSONObject();
+                        json.put("error", 2);
+                        json.put("desc", "ERROR ! TRY AGAIN ...");
+                        response.getWriter().write(json.toString());
+                    }
+                } else {
                     JSONObject json = new JSONObject();
                     json.put("error", 2);
                     json.put("desc", "ERROR ! TRY AGAIN ...");
+                    response.getWriter().write(json.toString());
                 }
-            }else{
-                JSONObject json = new JSONObject();
-                json.put("error", 2);
-                json.put("desc", "ERROR ! TRY AGAIN ...");
             }
             
         } catch (IOException ex) {
