@@ -63,9 +63,7 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
             Context initialContext = (Context) ic.lookup("java:comp/env");
             DataSource datasource = (DataSource) initialContext.lookup("jdbc/MySQLDS");
             connection = datasource.getConnection();
-            ResultSet rs;
 
-            JSONObject json = new JSONObject();
 
             if ((Long)jsonObject.get("id") == 0) {
                 
@@ -232,8 +230,8 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 }
                 
                 JSONObject jSONObject = new JSONObject();
-                json.put("id", recordId);
-                json.put("error", 0);
+                jSONObject.put("id", recordId);
+                jSONObject.put("error", 0);
                 response.getWriter().write(jSONObject.toString());
                 
             }else{
@@ -486,7 +484,7 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 ps.executeUpdate();
                 
                 JSONObject jSONObject = new JSONObject();
-                json.put("error", 0);
+                jSONObject.put("error", 0);
                 response.getWriter().write(jSONObject.toString());
             }
         } catch (IOException ex) {
