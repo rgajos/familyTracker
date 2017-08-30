@@ -237,255 +237,362 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 response.getWriter().write(jSONObject.toString());
                 
             }else{
+                
+                String checkEmailQuery = "";
+
                 String updateRecordQuery = "";
                 Long route = (Long) jsonObject.get("route");
+                Long newTime = (Long) jsonObject.get("time");
 
                 switch (route.intValue()) {
                     case 1:
+                        checkEmailQuery = "select * from challenge_walking_2000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_2000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 2:
+                        checkEmailQuery = "select * from challenge_walking_4000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_4000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 3:
+                        checkEmailQuery = "select * from challenge_walking_6000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_6000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 4:
+                        checkEmailQuery = "select * from challenge_walking_8000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_8000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 5:
+                        checkEmailQuery = "select * from challenge_walking_10000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_10000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 6:
+                        checkEmailQuery = "select * from challenge_walking_12000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_12000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 7:
+                        checkEmailQuery = "select * from challenge_walking_14000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_14000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 8:
+                        checkEmailQuery = "select * from challenge_walking_16000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_16000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 9:
+                        checkEmailQuery = "select * from challenge_walking_18000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_18000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 10:
+                        checkEmailQuery = "select * from challenge_walking_20000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_20000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 11:
+                        checkEmailQuery = "select * from challenge_walking_22000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_22000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 12:
+                        checkEmailQuery = "select * from challenge_walking_24000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_24000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 13:
+                        checkEmailQuery = "select * from challenge_walking_26000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_26000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 14:
+                        checkEmailQuery = "select * from challenge_walking_28000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_28000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 15:
+                        checkEmailQuery = "select * from challenge_walking_30000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_30000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 16:
+                        checkEmailQuery = "select * from challenge_walking_42195 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_walking_42195 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 17:
+                        checkEmailQuery = "select * from challenge_running_2000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_2000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 18:
+                        checkEmailQuery = "select * from challenge_running_4000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_4000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 19:
+                        checkEmailQuery = "select * from challenge_running_6000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_6000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 20:
+                        checkEmailQuery = "select * from challenge_running_8000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_8000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 21:
+                        checkEmailQuery = "select * from challenge_running_10000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_10000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 22:
+                        checkEmailQuery = "select * from challenge_running_12000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_12000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 23:
+                        checkEmailQuery = "select * from challenge_running_14000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_14000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 24:
+                        checkEmailQuery = "select * from challenge_running_16000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_16000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 25:
+                        checkEmailQuery = "select * from challenge_running_18000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_18000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 26:
+                        checkEmailQuery = "select * from challenge_running_20000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_20000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 27:
+                        checkEmailQuery = "select * from challenge_running_22000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_22000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 28:
+                        checkEmailQuery = "select * from challenge_running_24000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_24000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 29:
+                        checkEmailQuery = "select * from challenge_running_26000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_26000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 30:
+                        checkEmailQuery = "select * from challenge_running_28000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_28000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 31:
+                        checkEmailQuery = "select * from challenge_running_30000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_30000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 32:
+                        checkEmailQuery = "select * from challenge_running_42195 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_running_42195 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 33:
+                        checkEmailQuery = "select * from challenge_cycling_5000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_5000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 34:
+                        checkEmailQuery = "select * from challenge_cycling_10000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_10000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 35:
+                        checkEmailQuery = "select * from challenge_cycling_15000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_15000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 36:
+                        checkEmailQuery = "select * from challenge_cycling_20000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_20000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 37:
+                        checkEmailQuery = "select * from challenge_cycling_25000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_25000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 38:
+                        checkEmailQuery = "select * from challenge_cycling_30000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_30000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 39:
+                        checkEmailQuery = "select * from challenge_cycling_35000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_35000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 40:
+                        checkEmailQuery = "select * from challenge_cycling_40000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_40000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 41:
+                        checkEmailQuery = "select * from challenge_cycling_45000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_45000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 42:
+                        checkEmailQuery = "select * from challenge_ycling_50000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_50000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 43:
+                        checkEmailQuery = "select * from challenge_cycling_55000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_55000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 44:
+                        checkEmailQuery = "select * from challenge_cycling_60000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_60000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 45:
+                        checkEmailQuery = "select * from challenge_cycling_65000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_65000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 46:
+                        checkEmailQuery = "select * from challenge_cycling_70000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_70000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 47:
+                        checkEmailQuery = "select * from challenge_cycling_75000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_75000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                     case 48:
+                        checkEmailQuery = "select * from challenge_cycling_100000 where ID='" + (Long) jsonObject.get("id") + "'";
+                        
                         updateRecordQuery = "update challenge_cycling_100000 set "
-                                + "TIME='" + (Long) jsonObject.get("time") + "'"
+                                + "TIME='" + newTime + "'"
                                 + " where ID='" + (Long) jsonObject.get("id") + "'";
                         break;
                 }
-
-                ps = connection.prepareStatement(updateRecordQuery);
-                ps.executeUpdate();
                 
+                ps = connection.prepareStatement(checkEmailQuery);
+                ResultSet rs = ps.executeQuery();
+
+                long time = rs.getLong(3);
+                
+                if(newTime < time){
+                    ps = connection.prepareStatement(updateRecordQuery);
+                    ps.executeUpdate();
+                }
+
                 JSONObject jSONObject = new JSONObject();
                 jSONObject.put("error", 0);
                 response.getWriter().write(jSONObject.toString());
