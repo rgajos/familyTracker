@@ -69,7 +69,9 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 
                 String insertRecordQuery = "";
                 
-                switch((Integer)jsonObject.get("route")){
+                Long route = (Long) jsonObject.get("route");
+                
+                switch(route.intValue()){
                     case 1:
                         insertRecordQuery = "insert into challenge_walking_2000 (name, time, country) values (?,?,?)";
                         break;
@@ -219,7 +221,7 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 
                 ps = connection.prepareStatement(insertRecordQuery, Statement.RETURN_GENERATED_KEYS);
                 ps.setString(1, jsonObject.get("name").toString());
-                ps.setString(2, jsonObject.get("time").toString());
+                ps.setLong(2, (Long)jsonObject.get("time"));
                 ps.setString(3, jsonObject.get("country").toString());
                 ps.executeUpdate();
                 
