@@ -238,8 +238,9 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 
             }else{
                 String updateRecordQuery = "";
-                
-                switch ((Integer) jsonObject.get("route")) {
+                Long route = (Long) jsonObject.get("route");
+
+                switch (route.intValue()) {
                     case 1:
                         updateRecordQuery = "update challenge_walking_2000 set "
                                 + "TIME='" + (Long) jsonObject.get("time") + "'"

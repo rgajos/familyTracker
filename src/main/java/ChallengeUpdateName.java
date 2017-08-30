@@ -71,7 +71,9 @@ public class ChallengeUpdateName extends HttpServlet {
 
             for(RecordIds recordIds : recordIdsList){
                 
-            switch ((int)recordIds.getId()) {
+            Long id = recordIds.getId();
+            
+            switch (id.intValue()) {
                 case 1:
                     updateRecordQuery = "update challenge_walking_2000 set "
                             + "NAME='" + jsonObject.get("name").toString() + "'"
