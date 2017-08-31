@@ -586,11 +586,13 @@ public class ChallengeUpdateDistanceTime extends HttpServlet {
                 ps = connection.prepareStatement(checkEmailQuery);
                 ResultSet rs = ps.executeQuery();
 
-                long time = rs.getLong(3);
-                
-                if(newTime < time){
-                    ps = connection.prepareStatement(updateRecordQuery);
-                    ps.executeUpdate();
+                if(rs.next()){
+                    long time = rs.getLong(3);
+
+                    if (newTime < time) {
+                        ps = connection.prepareStatement(updateRecordQuery);
+                        ps.executeUpdate();
+                    }
                 }
 
                 JSONObject jSONObject = new JSONObject();
